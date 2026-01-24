@@ -2,6 +2,28 @@
 
 A comprehensive, production-ready framework for rapidly prototyping and building AI-powered products. This framework provides a complete ecosystem with frontend, backend, AI services integration, and deployment configurations.
 
+## 🚀 Quick Start
+
+**New to the framework?** Check out the [QUICKSTART.md](./QUICKSTART.md) guide to:
+- Set up your environment in 5 minutes
+- Build your first AI prototype in under 15 minutes
+- Test 3 ready-to-use AI prototypes (Code Reviewer, Summarizer, Interview Practice)
+
+**Or jump right in:**
+```bash
+# 1. Setup
+./scripts/setup.sh
+
+# 2. Configure your .env file with API keys
+
+# 3. Start everything
+docker-compose up
+
+# 4. Test prototypes
+chmod +x scripts/test-prototypes.sh
+./scripts/test-prototypes.sh
+```
+
 ## Architecture
 
 This framework follows a modular architecture based on best practices for AI product development:

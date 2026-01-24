@@ -1,0 +1,49 @@
+{
+  "name": "AI Prototyping Platform - Backend",
+  "description": "Backend service for AI prototyping framework",
+  "repository": "https://github.com/yourusername/ai-prototyping-platform",
+  "keywords": ["ai", "chatgpt", "claude", "node", "typescript"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "description": "Node environment",
+      "value": "production"
+    },
+    "DATABASE_TYPE": {
+      "description": "Database type (mongodb or supabase)",
+      "value": "mongodb"
+    },
+    "MONGODB_URI": {
+      "description": "MongoDB connection string"
+    },
+    "ANTHROPIC_API_KEY": {
+      "description": "Anthropic API key"
+    },
+    "OPENAI_API_KEY": {
+      "description": "OpenAI API key"
+    },
+    "JWT_SECRET": {
+      "description": "JWT secret for authentication",
+      "generator": "secret"
+    },
+    "CORS_ORIGIN": {
+      "description": "CORS origin URL",
+      "value": "https://your-frontend-domain.vercel.app"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "addons": [
+    {
+      "plan": "mongolab:sandbox"
+    }
+  ]
+}

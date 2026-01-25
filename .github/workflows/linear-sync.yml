@@ -1,0 +1,70 @@
+# Linear <-> GitHub Sync Workflow
+# This workflow helps maintain synchronization between GitHub and Linear
+
+name: Linear Sync
+
+on:
+  pull_request:
+    types: [opened, closed, reopened, ready_for_review, converted_to_draft]
+  issues:
+    types: [opened, closed, reopened]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  extract-linear-id:
+    runs-on: ubuntu-latest
+    outputs:
+      linear_id: ${{ steps.extract.outputs.linear_id }}
+    steps:
+      - name: Extract Linear ID from PR/Issue
+        id: extract
+        run: |
+          # Extract LIN-XXX pattern from title or body
+          CONTENT="${{ github.event.pull_request.title || github.event.issue.title }} ${{ github.event.pull_request.body || github.event.issue.body }}"
+          LINEAR_ID=$(echo "$CONTENT" | grep -oE 'LIN-[0-9]+' | head -1 || echo "")
+          echo "linear_id=$LINEAR_ID" >> $GITHUB_OUTPUT
+          echo "Found Linear ID: $LINEAR_ID"
+
+  notify-linear-pr-opened:
+    needs: extract-linear-id
+    if: github.event_name == 'pull_request' && github.event.action == 'opened' && needs.extract-linear-id.outputs.linear_id != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on PR
+        run: |
+          echo "PR opened for Linear issue: ${{ needs.extract-linear-id.outputs.linear_id }}"
+          # Linear's GitHub integration will auto-move issue to "Code Review"
+          # This step is for additional custom logic if needed
+
+  notify-linear-pr-merged:
+    needs: extract-linear-id
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && needs.extract-linear-id.outputs.linear_id != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify merge
+        run: |
+          echo "PR merged for Linear issue: ${{ needs.extract-linear-id.outputs.linear_id }}"
+          echo "Target branch: ${{ github.event.pull_request.base.ref }}"
+          # Linear's GitHub integration will auto-move issue based on branch
+          # develop -> Staging/QA
+          # main -> Production
+
+  label-sync:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues'
+    steps:
+      - name: Sync labels
+        run: |
+          echo "Issue event: ${{ github.event.action }}"
+          # Add custom label sync logic here
+          # Example: Map GitHub labels to Linear labels
+
+# Note: Most Linear <-> GitHub sync is handled by Linear's native integration
+# This workflow provides hooks for custom automation
+#
+# To enable full integration:
+# 1. Go to Linear Settings > Integrations > GitHub
+# 2. Connect your GitHub organization
+# 3. Configure auto-close and branch settings
+# 4. Set up workflow automations in Linear

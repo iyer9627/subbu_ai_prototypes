@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+vendor/
+.pnp/
+.pnp.js
+
+# Build outputs
+dist/
+build/
+out/
+*.egg-info/
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.envrc
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Testing
+coverage/
+.nyc_output/
+.pytest_cache/
+htmlcov/
+
+# Secrets (never commit these)
+*.pem
+*.key
+credentials.json
+secrets.json
+service-account.json
+
+# Misc
+*.tmp
+*.temp
+.cache/
+tmp/
+temp/

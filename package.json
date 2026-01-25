@@ -1,0 +1,22 @@
+{
+  "name": "subbu-ai-prototypes",
+  "version": "0.1.0",
+  "description": "AI prototyping playground with structured development workflow",
+  "type": "module",
+  "scripts": {
+    "setup:linear": "node scripts/setup-linear.mjs",
+    "dev": "echo 'Add your dev server command here'",
+    "build": "echo 'Add your build command here'",
+    "test": "echo 'Add your test command here'",
+    "lint": "echo 'Add your lint command here'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iyer9627/subbu_ai_prototypes.git"
+  },
+  "author": "Subramaniyam",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

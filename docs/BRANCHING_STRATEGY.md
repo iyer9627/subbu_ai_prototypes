@@ -15,9 +15,12 @@ main (production)
         │
         └── develop (integration)
               │
-              ├── feature/* (new features)
-              ├── fix/* (bug fixes)
-              └── chore/* (maintenance)
+              └── ideate (prototype/POC)
+                    │
+                    ├── prototype/* (experimental features)
+                    ├── feature/* (new features)
+                    ├── fix/* (bug fixes)
+                    └── chore/* (maintenance)
 
 hotfix/* branches from main for emergency fixes
 release/* branches for release preparation
@@ -34,12 +37,14 @@ release/* branches for release preparation
 | `main` | Production | Auto on merge | Requires PR, 2 approvals, passing CI |
 | `staging` | Staging | Auto on merge | Requires PR, 1 approval, passing CI |
 | `develop` | Development | Auto on merge | Requires PR, passing CI |
+| `ideate` | Prototype | Auto on merge | Requires PR, passing CI (relaxed) |
 
 ### Working Branches
 
 | Pattern | Purpose | Base | Target |
 |---------|---------|------|--------|
-| `feature/LIN-*` | New features | `develop` | `develop` |
+| `prototype/LIN-*` | Experimental POCs | `ideate` | `ideate` |
+| `feature/LIN-*` | New features | `ideate` or `develop` | `ideate` or `develop` |
 | `fix/LIN-*` | Bug fixes | `develop` | `develop` |
 | `hotfix/LIN-*` | Production fixes | `main` | `main` + `develop` |
 | `release/v*` | Release prep | `develop` | `main` + `develop` |
@@ -50,11 +55,37 @@ release/* branches for release preparation
 
 ## Workflows
 
+### Prototype Development (Ideation Phase)
+
+```bash
+# 1. Start from latest ideate branch
+git checkout ideate
+git pull origin ideate
+
+# 2. Create prototype branch
+git checkout -b prototype/LIN-100-ai-recommendation-poc
+
+# 3. Work on prototype (commit often, experimentation encouraged)
+git add .
+git commit -m "[LIN-100] prototype: initial recommendation engine POC"
+
+# 4. Keep up to date with ideate
+git fetch origin ideate
+git rebase origin/ideate
+
+# 5. Push and create PR to ideate
+git push -u origin prototype/LIN-100-ai-recommendation-poc
+# Create PR: prototype/LIN-100 → ideate
+
+# 6. After validation, promote to develop
+# Create PR: ideate → develop (for validated prototypes)
+```
+
 ### Feature Development
 
 ```bash
-# 1. Start from latest develop
-git checkout develop
+# 1. Start from latest develop (or ideate for new features)
+git checkout develop  # or: git checkout ideate
 git pull origin develop
 
 # 2. Create feature branch
@@ -151,16 +182,18 @@ git push origin --delete release/v1.2.0
 ## Environment Promotion
 
 ```
-Feature Branch → develop → staging → main
-                    │         │        │
-                    ▼         ▼        ▼
-               Dev Env    Staging   Production
+Prototype Branch → ideate → develop → staging → main
+                      │         │         │        │
+                      ▼         ▼         ▼        ▼
+                 Prototype   Dev Env   Staging  Production
 ```
 
 ### Promotion Rules
 
 | From | To | Trigger | Requirements |
 |------|-----|---------|--------------|
+| prototype/* | ideate | PR merge | CI passes (relaxed) |
+| ideate | develop | PR merge | CI passes, 1 approval, prototype validated |
 | feature/* | develop | PR merge | CI passes, 1 approval |
 | develop | staging | Manual/scheduled | All develop tests pass |
 | staging | main | Release approval | QA sign-off, all tests pass |
@@ -177,6 +210,7 @@ Feature Branch → develop → staging → main
 
 ### Examples
 ```
+prototype/LIN-100-ai-recommendation-poc
 feature/LIN-123-user-authentication
 fix/LIN-456-login-validation-error
 hotfix/LIN-789-security-patch
@@ -257,6 +291,8 @@ git branch --merged develop
 ```yaml
 # In CI/CD config
 branches:
+  ideate:
+    deploy_to: prototype
   develop:
     deploy_to: development
   staging:
@@ -272,6 +308,7 @@ branches:
 | Event | Action |
 |-------|--------|
 | PR opened | Run tests, lint, build |
+| PR merged to ideate | Deploy to prototype environment |
 | PR merged to develop | Deploy to dev environment |
 | PR merged to staging | Deploy to staging, run E2E tests |
 | Tag pushed (v*) | Deploy to production, create release |

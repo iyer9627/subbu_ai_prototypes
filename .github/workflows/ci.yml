@@ -5,9 +5,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main, staging, develop]
+    branches: [main, staging, develop, ideate]
   pull_request:
-    branches: [main, staging, develop]
+    branches: [main, staging, develop, ideate]
 
 env:
   NODE_VERSION: '20'  # Adjust as needed
@@ -105,6 +105,32 @@ jobs:
   # ============================================
   # Deployment Jobs - Run on specific branches
   # ============================================
+
+  deploy-ideate:
+    name: Deploy to Ideate/Prototype
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/ideate' && github.event_name == 'push'
+    environment: prototype
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: dist/
+
+      - name: Deploy to Prototype Environment
+        run: |
+          echo "Deploying to prototype environment..."
+          # Add your deployment script here
+          # This is for early exploration and POCs
+
+      - name: Notify deployment
+        run: |
+          echo "Deployed to prototype environment"
+          # Notify Slack, update Linear issues to "Ideate/Prototype"
 
   deploy-develop:
     name: Deploy to Develop

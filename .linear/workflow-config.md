@@ -201,14 +201,35 @@ trigger: issue.pr_opened
 action:
   - set_state: "Code Review"
 
+# When PR is merged to ideate, move to Ideate/Prototype
+trigger: issue.pr_merged
+condition: target_branch == "ideate"
+action:
+  - set_state: "Ideate/Prototype"
+  - add_comment: "Deployed to prototype environment"
+
 # When PR is merged to develop, move to Develop
 trigger: issue.pr_merged
 condition: target_branch == "develop"
 action:
+  - set_state: "Develop"
+  - add_comment: "Deployed to development environment"
+
+# When PR is merged to staging, move to Staging/QA
+trigger: issue.pr_merged
+condition: target_branch == "staging"
+action:
   - set_state: "Staging/QA"
   - add_comment: "Deployed to staging environment"
 
-# When deployed to production
+# When PR is merged to main, move to Production
+trigger: issue.pr_merged
+condition: target_branch == "main"
+action:
+  - set_state: "Production"
+  - add_comment: "Deployed to production environment"
+
+# Alternative: When deployed to production via label
 trigger: label.added
 condition: label == "deployed:production"
 action:

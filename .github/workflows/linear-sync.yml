@@ -46,9 +46,11 @@ jobs:
         run: |
           echo "PR merged for Linear issue: ${{ needs.extract-linear-id.outputs.linear_id }}"
           echo "Target branch: ${{ github.event.pull_request.base.ref }}"
-          # Linear's GitHub integration will auto-move issue based on branch
-          # develop -> Staging/QA
-          # main -> Production
+          # Linear's GitHub integration will auto-move issue based on branch:
+          # ideate  -> Ideate/Prototype
+          # develop -> Develop
+          # staging -> Staging/QA
+          # main    -> Production
 
   label-sync:
     runs-on: ubuntu-latest

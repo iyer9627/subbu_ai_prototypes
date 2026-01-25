@@ -9,7 +9,7 @@
 ## Pre-Release (T-3 days)
 
 ### Code Freeze
-- [ ] All features for this release are merged to `develop`
+- [ ] All features for this release are merged to `dev`
 - [ ] Release branch created: `release/vX.Y.Z`
 - [ ] No new features allowed (only bug fixes)
 
@@ -96,7 +96,7 @@
 - [ ] Social media update (if applicable)
 
 ### Cleanup
-- [ ] Release branch merged back to `develop`
+- [ ] Release branch merged back to `dev`
 - [ ] Release branch deleted
 - [ ] Linear project marked as completed
 - [ ] Old feature branches cleaned up

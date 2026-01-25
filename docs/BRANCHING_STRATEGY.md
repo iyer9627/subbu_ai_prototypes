@@ -13,7 +13,7 @@ main (production)
   │
   └── staging (QA/UAT)
         │
-        └── develop (integration)
+        └── dev (integration)
               │
               └── ideate (prototype/POC)
                     │
@@ -36,7 +36,7 @@ release/* branches for release preparation
 |--------|-------------|--------|------------|
 | `main` | Production | Auto on merge | Requires PR, 2 approvals, passing CI |
 | `staging` | Staging | Auto on merge | Requires PR, 1 approval, passing CI |
-| `develop` | Development | Auto on merge | Requires PR, passing CI |
+| `dev` | Development | Auto on merge | Requires PR, passing CI |
 | `ideate` | Prototype | Auto on merge | Requires PR, passing CI (relaxed) |
 
 ### Working Branches
@@ -44,12 +44,12 @@ release/* branches for release preparation
 | Pattern | Purpose | Base | Target |
 |---------|---------|------|--------|
 | `prototype/LIN-*` | Experimental POCs | `ideate` | `ideate` |
-| `feature/LIN-*` | New features | `ideate` or `develop` | `ideate` or `develop` |
-| `fix/LIN-*` | Bug fixes | `develop` | `develop` |
-| `hotfix/LIN-*` | Production fixes | `main` | `main` + `develop` |
-| `release/v*` | Release prep | `develop` | `main` + `develop` |
-| `chore/LIN-*` | Maintenance | `develop` | `develop` |
-| `docs/LIN-*` | Documentation | `develop` | `develop` |
+| `feature/LIN-*` | New features | `ideate` or `dev` | `ideate` or `dev` |
+| `fix/LIN-*` | Bug fixes | `dev` | `dev` |
+| `hotfix/LIN-*` | Production fixes | `main` | `main` + `dev` |
+| `release/v*` | Release prep | `dev` | `main` + `dev` |
+| `chore/LIN-*` | Maintenance | `dev` | `dev` |
+| `docs/LIN-*` | Documentation | `dev` | `dev` |
 
 ---
 
@@ -77,16 +77,16 @@ git rebase origin/ideate
 git push -u origin prototype/LIN-100-ai-recommendation-poc
 # Create PR: prototype/LIN-100 → ideate
 
-# 6. After validation, promote to develop
-# Create PR: ideate → develop (for validated prototypes)
+# 6. After validation, promote to dev
+# Create PR: ideate → dev (for validated prototypes)
 ```
 
 ### Feature Development
 
 ```bash
-# 1. Start from latest develop (or ideate for new features)
-git checkout develop  # or: git checkout ideate
-git pull origin develop
+# 1. Start from latest dev (or ideate for new features)
+git checkout dev  # or: git checkout ideate
+git pull origin dev
 
 # 2. Create feature branch
 git checkout -b feature/LIN-123-user-authentication
@@ -95,17 +95,17 @@ git checkout -b feature/LIN-123-user-authentication
 git add .
 git commit -m "[LIN-123] feat: add login endpoint"
 
-# 4. Keep up to date with develop
-git fetch origin develop
-git rebase origin/develop
+# 4. Keep up to date with dev
+git fetch origin dev
+git rebase origin/dev
 
 # 5. Push and create PR
 git push -u origin feature/LIN-123-user-authentication
-# Create PR: feature/LIN-123 → develop
+# Create PR: feature/LIN-123 → dev
 
 # 6. After merge, delete branch
-git checkout develop
-git pull origin develop
+git checkout dev
+git pull origin dev
 git branch -d feature/LIN-123-user-authentication
 ```
 
@@ -132,19 +132,19 @@ git commit -m "[LIN-789] fix: patch XSS vulnerability"
 git push -u origin hotfix/LIN-789-security-patch
 # Create PR: hotfix/LIN-789 → main
 
-# 4. After merge to main, cherry-pick to develop
-git checkout develop
-git pull origin develop
+# 4. After merge to main, cherry-pick to dev
+git checkout dev
+git pull origin dev
 git cherry-pick <commit-sha>
-git push origin develop
+git push origin dev
 ```
 
 ### Release Process
 
 ```bash
-# 1. Create release branch from develop
-git checkout develop
-git pull origin develop
+# 1. Create release branch from dev
+git checkout dev
+git pull origin dev
 git checkout -b release/v1.2.0
 
 # 2. Bump version
@@ -167,10 +167,10 @@ git pull origin main
 git tag -a v1.2.0 -m "Release v1.2.0"
 git push origin v1.2.0
 
-# 6. Merge back to develop
-git checkout develop
+# 6. Merge back to dev
+git checkout dev
 git merge release/v1.2.0
-git push origin develop
+git push origin dev
 
 # 7. Delete release branch
 git branch -d release/v1.2.0
@@ -182,7 +182,7 @@ git push origin --delete release/v1.2.0
 ## Environment Promotion
 
 ```
-Prototype Branch → ideate → develop → staging → main
+Prototype Branch → ideate → dev → staging → main
                       │         │         │        │
                       ▼         ▼         ▼        ▼
                  Prototype   Dev Env   Staging  Production
@@ -193,9 +193,9 @@ Prototype Branch → ideate → develop → staging → main
 | From | To | Trigger | Requirements |
 |------|-----|---------|--------------|
 | prototype/* | ideate | PR merge | CI passes (relaxed) |
-| ideate | develop | PR merge | CI passes, 1 approval, prototype validated |
-| feature/* | develop | PR merge | CI passes, 1 approval |
-| develop | staging | Manual/scheduled | All develop tests pass |
+| ideate | dev | PR merge | CI passes, 1 approval, prototype validated |
+| feature/* | dev | PR merge | CI passes, 1 approval |
+| dev | staging | Manual/scheduled | All dev tests pass |
 | staging | main | Release approval | QA sign-off, all tests pass |
 | hotfix/* | main | PR merge | CI passes, Tech Lead approval |
 
@@ -231,16 +231,16 @@ release/v1.2.0
 
 | Merge Type | When | Method |
 |------------|------|--------|
-| Feature → develop | Normal features | Squash merge |
-| Fix → develop | Bug fixes | Squash merge |
-| develop → staging | Environment promotion | Merge commit |
+| Feature → dev | Normal features | Squash merge |
+| Fix → dev | Bug fixes | Squash merge |
+| dev → staging | Environment promotion | Merge commit |
 | staging → main | Release | Merge commit |
 | Hotfix → main | Emergency fix | Merge commit |
 | Release → main | Release | Merge commit |
 
 ### Why Squash for Features?
 
-- Cleaner history on develop
+- Cleaner history on dev
 - One commit per feature/fix
 - Easier to revert
 
@@ -259,9 +259,9 @@ release/v1.2.0
 git fetch origin
 git pull origin <branch>
 
-# Rebase feature on develop
+# Rebase feature on dev
 git checkout feature/LIN-123
-git rebase origin/develop
+git rebase origin/dev
 
 # Interactive rebase to clean commits
 git rebase -i HEAD~3
@@ -279,7 +279,7 @@ git log --oneline --graph --all
 git push origin --delete <branch-name>
 
 # List merged branches
-git branch --merged develop
+git branch --merged dev
 ```
 
 ---
@@ -293,8 +293,8 @@ git branch --merged develop
 branches:
   ideate:
     deploy_to: prototype
-  develop:
-    deploy_to: development
+  dev:
+    deploy_to: devment
   staging:
     deploy_to: staging
   main:
@@ -309,7 +309,7 @@ branches:
 |-------|--------|
 | PR opened | Run tests, lint, build |
 | PR merged to ideate | Deploy to prototype environment |
-| PR merged to develop | Deploy to dev environment |
+| PR merged to dev | Deploy to dev environment |
 | PR merged to staging | Deploy to staging, run E2E tests |
 | Tag pushed (v*) | Deploy to production, create release |
 
@@ -321,7 +321,7 @@ branches:
 
 ```bash
 # During rebase
-git rebase origin/develop
+git rebase origin/dev
 # Fix conflicts in files
 git add <fixed-files>
 git rebase --continue

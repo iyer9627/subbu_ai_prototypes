@@ -1,12 +1,12 @@
 # Contributing Guide
 
-Thank you for contributing to this project! This guide outlines our development workflow and processes.
+Thank you for contributing to this project! This guide outlines our devment workflow and processes.
 
 ---
 
 ## Table of Contents
 
-- [Development Workflow](#development-workflow)
+- [Development Workflow](#devment-workflow)
 - [Environment Setup](#environment-setup)
 - [Creating Issues](#creating-issues)
 - [Working on Issues](#working-on-issues)
@@ -25,7 +25,7 @@ We use Linear for project management and follow a GitFlow-inspired branching str
 | Environment | Branch | Purpose |
 |-------------|--------|---------|
 | Prototype | feature branches | Early exploration, POCs |
-| Develop | `develop` | Integration testing |
+| Develop | `dev` | Integration testing |
 | Staging | `staging` | QA and UAT |
 | Production | `main` | Live customers |
 
@@ -52,7 +52,7 @@ npm install  # or: pip install -r requirements.txt
 # Copy environment file
 cp .env.example .env
 
-# Start development server
+# Start devment server
 npm run dev
 ```
 
@@ -231,7 +231,7 @@ For critical production bugs:
 1. Branch from `main`
 2. Fix with expedited review
 3. Merge to `main` + tag
-4. Cherry-pick to `develop` and `staging`
+4. Cherry-pick to `dev` and `staging`
 
 ---
 

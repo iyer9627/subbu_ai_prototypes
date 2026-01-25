@@ -48,7 +48,7 @@ jobs:
           echo "Target branch: ${{ github.event.pull_request.base.ref }}"
           # Linear's GitHub integration will auto-move issue based on branch:
           # ideate  -> Ideate/Prototype
-          # develop -> Develop
+          # dev -> Develop
           # staging -> Staging/QA
           # main    -> Production
 

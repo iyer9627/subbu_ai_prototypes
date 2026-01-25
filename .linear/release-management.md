@@ -60,11 +60,11 @@ Examples:
 |--------|---------|--------|-----------|
 | `main` | Production-ready code | - | - |
 | `staging` | QA/UAT environment | - | `main` |
-| `develop` | Integration branch | - | `staging` |
-| `feature/*` | New features | `feature/LIN-XXX-description` | `develop` |
-| `fix/*` | Bug fixes | `fix/LIN-XXX-description` | `develop` |
-| `hotfix/*` | Production fixes | `hotfix/LIN-XXX-description` | `main` + `develop` |
-| `release/*` | Release preparation | `release/v1.2.0` | `main` + `develop` |
+| `dev` | Integration branch | - | `staging` |
+| `feature/*` | New features | `feature/LIN-XXX-description` | `dev` |
+| `fix/*` | Bug fixes | `fix/LIN-XXX-description` | `dev` |
+| `hotfix/*` | Production fixes | `hotfix/LIN-XXX-description` | `main` + `dev` |
+| `release/*` | Release preparation | `release/v1.2.0` | `main` + `dev` |
 
 ### Branch Flow Diagram
 
@@ -75,7 +75,7 @@ main ─────────●─────────────●─
 staging ──────┼─────────────●─────────────●──────────────────────●────
               │             ▲             ▲                      ▲
               │             │             │                      │
-develop ──────┼──●──●──●────●──●──●──●────●──●──●──●──●──●──●────●────
+dev ──────┼──●──●──●────●──●──●──●────●──●──●──●──●──●──●────●────
               │  ▲  ▲  ▲       ▲  ▲  ▲       ▲  ▲  ▲  ▲  ▲  ▲
               │  │  │  │       │  │  │       │  │  │  │  │  │
 feature/* ────┴──┴──┴──┴───────┴──┴──┴───────┴──┴──┴──┴──┴──┴────────
@@ -93,8 +93,8 @@ Scheduled releases with new features and improvements.
 
 **Process**:
 ```
-1. Create release branch from develop
-   └─▶ git checkout -b release/v1.2.0 develop
+1. Create release branch from dev
+   └─▶ git checkout -b release/v1.2.0 dev
 
 2. Version bump & changelog
    └─▶ Update version in package.json/pyproject.toml
@@ -118,8 +118,8 @@ Scheduled releases with new features and improvements.
 7. Deploy to Production
    └─▶ Triggered by tag
 
-8. Merge back to develop
-   └─▶ Ensure develop has release fixes
+8. Merge back to dev
+   └─▶ Ensure dev has release fixes
 ```
 
 ### 2. Hotfix Release
@@ -145,7 +145,7 @@ Emergency fixes for production issues.
 
 5. Deploy to Production immediately
 
-6. Cherry-pick to develop and staging
+6. Cherry-pick to dev and staging
    └─▶ Ensure fix is in all branches
 ```
 
@@ -235,7 +235,7 @@ Create for each release:
 - [ ] Release notes published
 - [ ] Customers notified (if applicable)
 - [ ] Internal announcement (#releases)
-- [ ] Merge release branch back to develop
+- [ ] Merge release branch back to dev
 - [ ] Delete release branch
 - [ ] Update Linear project status to Completed
 - [ ] Schedule retrospective if needed

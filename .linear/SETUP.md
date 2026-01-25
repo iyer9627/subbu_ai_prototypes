@@ -73,7 +73,7 @@ type:performance   #eab308 (yellow)
 ### Environment Labels
 ```
 env:prototype      #0ea5e9 (sky blue)
-env:develop        #f59e0b (amber)
+env:dev        #f59e0b (amber)
 env:staging        #ec4899 (pink)
 env:production     #22c55e (green)
 ```
@@ -138,10 +138,10 @@ When: Pull request is opened
 Then: Set state to "Code Review"
 ```
 
-### Automation 3: Move to Staging on merge to develop
+### Automation 3: Move to Staging on merge to dev
 ```
 When: Pull request is merged
-If: Target branch is "develop" or "staging"
+If: Target branch is "dev" or "staging"
 Then: Set state to "Staging/QA"
 ```
 
@@ -302,5 +302,5 @@ Create these saved views for your team:
 ## Support
 
 - Linear Documentation: https://linear.app/docs
-- Linear API: https://developers.linear.app
+- Linear API: https://devers.linear.app
 - Community: https://linear.app/community

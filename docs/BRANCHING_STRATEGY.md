@@ -294,7 +294,7 @@ branches:
   ideate:
     deploy_to: prototype
   dev:
-    deploy_to: devment
+    deploy_to: development
   staging:
     deploy_to: staging
   main:

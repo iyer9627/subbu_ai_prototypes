@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the Linear workflow for **subbu_ai_prototypes**. It maps our devment lifecycle across 4 environments with integrated bug tracking, PR management, and release processes.
+This document defines the Linear workflow for **subbu_ai_prototypes**. It maps our development lifecycle across 4 environments with integrated bug tracking, PR management, and release processes.
 
 ---
 
@@ -24,7 +24,7 @@ This document defines the Linear workflow for **subbu_ai_prototypes**. It maps o
 | **Backlog** | backlog | `#95a2b3` | Unscheduled work, ideas, and requests |
 | **Triage** | unstarted | `#e2e2e2` | New issues awaiting prioritization |
 | **Ideate/Prototype** | started | `#0ea5e9` | Early exploration, POCs, design work |
-| **Develop** | started | `#f59e0b` | Active devment in progress |
+| **Develop** | started | `#f59e0b` | Active development in progress |
 | **Code Review** | started | `#8b5cf6` | PR submitted, awaiting review |
 | **Staging/QA** | started | `#ec4899` | Deployed to staging, under QA testing |
 | **Production** | started | `#22c55e` | Deployed to production, monitoring |
@@ -61,7 +61,7 @@ This document defines the Linear workflow for **subbu_ai_prototypes**. It maps o
 | Label | Color | Description |
 |-------|-------|-------------|
 | `env:prototype` | `#0ea5e9` | Affects prototype environment |
-| `env:dev` | `#f59e0b` | Affects devment environment |
+| `env:dev` | `#f59e0b` | Affects development environment |
 | `env:staging` | `#ec4899` | Affects staging environment |
 | `env:production` | `#22c55e` | Affects production environment |
 
@@ -213,7 +213,7 @@ trigger: issue.pr_merged
 condition: target_branch == "dev"
 action:
   - set_state: "Develop"
-  - add_comment: "Deployed to devment environment"
+  - add_comment: "Deployed to development environment"
 
 # When PR is merged to staging, move to Staging/QA
 trigger: issue.pr_merged
@@ -276,7 +276,7 @@ action:
 
 ### Recommended Teams
 
-1. **Engineering** - Core devment team
+1. **Engineering** - Core development team
 2. **QA** - Quality assurance team
 3. **DevOps** - Infrastructure and deployment
 4. **Support** - Customer-facing bug intake

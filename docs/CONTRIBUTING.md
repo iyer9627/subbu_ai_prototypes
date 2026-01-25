@@ -1,12 +1,12 @@
 # Contributing Guide
 
-Thank you for contributing to this project! This guide outlines our devment workflow and processes.
+Thank you for contributing to this project! This guide outlines our development workflow and processes.
 
 ---
 
 ## Table of Contents
 
-- [Development Workflow](#devment-workflow)
+- [Development Workflow](#development-workflow)
 - [Environment Setup](#environment-setup)
 - [Creating Issues](#creating-issues)
 - [Working on Issues](#working-on-issues)
@@ -52,7 +52,7 @@ npm install  # or: pip install -r requirements.txt
 # Copy environment file
 cp .env.example .env
 
-# Start devment server
+# Start development server
 npm run dev
 ```
 

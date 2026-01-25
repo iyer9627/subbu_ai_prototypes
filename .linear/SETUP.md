@@ -302,5 +302,5 @@ Create these saved views for your team:
 ## Support
 
 - Linear Documentation: https://linear.app/docs
-- Linear API: https://devers.linear.app
+- Linear API: https://developers.linear.app
 - Community: https://linear.app/community

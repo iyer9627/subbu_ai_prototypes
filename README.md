@@ -1,6 +1,6 @@
 # subbu_ai_prototypes
 
-AI prototyping playground with structured devment workflow.
+AI prototyping playground with structured development workflow.
 
 ## Development Workflow
 
@@ -11,7 +11,7 @@ This project uses Linear for project management with a 4-environment deployment 
 | Environment | Purpose | Branch |
 |-------------|---------|--------|
 | **Prototype** | Early exploration, POCs | feature branches |
-| **Develop** | Active devment | `dev` |
+| **Develop** | Active development | `dev` |
 | **Staging** | QA and testing | `staging` |
 | **Production** | Live customers | `main` |
 
@@ -34,7 +34,7 @@ cd subbu_ai_prototypes
 # Install dependencies
 npm install
 
-# Start devment
+# Start development
 npm run dev
 ```
 
@@ -74,7 +74,7 @@ Backlog → Triage → Ideate/Prototype → Develop → Code Review → Staging/
 
 ## Contributing
 
-See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for devment guidelines.
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for development guidelines.
 
 ## License
 

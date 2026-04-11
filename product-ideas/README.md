@@ -37,6 +37,7 @@ A structured catalog of product ideas — things that are feasible to build with
 | Idea | Category | Maturity | Summary |
 |------|----------|----------|---------|
 | [AI Experimentation Testbed](ideas/2026-04-11-ai-experimentation-testbed.md) | ai, infrastructure | raw | Enterprise-grade sandbox for rapidly prototyping and evaluating emerging AI tools, models, and frameworks against real-world use cases with structured scoring |
+| [FoodLoom — Family Recipe Keeper](ideas/2026-04-11-foodloom-family-recipe-keeper.md) | social-good, ai | raw | Voice-first mobile app that lets home cooks capture recipes by talking and taking photos as they cook, preserving family food traditions as a digital heirloom |
 
 ## Adding a New Idea
 

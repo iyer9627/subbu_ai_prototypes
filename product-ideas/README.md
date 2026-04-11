@@ -36,7 +36,7 @@ A structured catalog of product ideas — things that are feasible to build with
 
 | Idea | Category | Maturity | Summary |
 |------|----------|----------|---------|
-| *No ideas yet — add your first one!* | | | |
+| [AI Experimentation Testbed](ideas/2026-04-11-ai-experimentation-testbed.md) | ai, infrastructure | raw | Enterprise-grade sandbox for rapidly prototyping and evaluating emerging AI tools, models, and frameworks against real-world use cases with structured scoring |
 
 ## Adding a New Idea
 

@@ -96,6 +96,21 @@ A voice-first, multilingual mobile app that lets anyone — regardless of age, t
 - Should the AI suggest improvements/substitutions, or is that overstepping the "preserve as-is" philosophy?
 - How to onboard users who are intimidated by any technology — can the app be set up by a family member and then just work with voice?
 
+## Rating — 8.5/10
+
+*Rated: 2026-04-11*
+
+| Dimension | Score | Notes |
+|-----------|-------|-------|
+| Problem clarity | 10/10 | Universal, deeply felt, irreversible loss when recipes disappear |
+| Market size | 9/10 | Every family, every culture, every country. Billions of potential users |
+| Uniqueness | 9/10 | Nothing else is voice-first, capture-while-cooking, multilingual, with a family heirloom angle |
+| Feasibility | 8/10 | All the tech exists today (Whisper, LLMs, mobile). No moonshot engineering needed |
+| Monetization | 7/10 | Printed cookbooks have high emotional value but core app needs to stay free to reach the right users. Freemium balance is tricky |
+| Emotional pull | 10/10 | "Cook your grandmother's dish in her voice 20 years from now" — that sells itself |
+
+**Verdict:** Strongest idea in the catalog. Clear problem, massive market, achievable tech, deep emotional resonance. The multilingual + diaspora angle is a moat nobody else is building. Top candidate to prototype first.
+
 ## Notes / Raw Thoughts
 
 The magic here is capturing what was never captured before. Every family has dishes that exist only in someone's hands and memory. The app doesn't ask people to change how they cook — it fits into the existing flow. You cook. You talk. You take a picture. The app does the rest.

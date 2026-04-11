@@ -92,6 +92,21 @@ A veterinary-science-backed companion app that acts as a daily support system fo
 - How to keep the veterinary knowledge base current as guidelines evolve?
 - Should it integrate with existing vet clinic systems (appointment booking, medical records)?
 
+## Rating — 7.0/10
+
+*Rated: 2026-04-11*
+
+| Dimension | Score | Notes |
+|-----------|-------|-------|
+| Problem clarity | 8/10 | Real problem, especially for first-time owners |
+| Market size | 7/10 | Large pet owner market but narrower than food/cooking |
+| Uniqueness | 6/10 | Exists in pieces (PetDesk, various vet apps). The science-backed + personalized reminders angle is the differentiator but not a huge moat |
+| Feasibility | 7/10 | Straightforward technically. The hard part is curating and maintaining the veterinary knowledge base with credibility |
+| Monetization | 7/10 | Multiple clear revenue streams. Vet partnerships and pet insurance are proven models |
+| Emotional pull | 8/10 | People love their pets deeply. "Help me be a better pet parent" resonates |
+
+**Verdict:** Solid, buildable, monetizable. Biggest risk is differentiation — you need the veterinary credibility to stand out from the noise. Strong second product.
+
 ## Notes / Raw Thoughts
 
 The core value is turning clueless but well-meaning pet owners into competent, confident ones. Most people love their pets but simply don't know what they don't know. They don't know that a Cocker Spaniel's ears need checking weekly, or that a puppy under 12 weeks shouldn't hold it for more than 2 hours, or that dogs need their teeth brushed.

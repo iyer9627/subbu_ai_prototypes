@@ -34,11 +34,26 @@ A structured catalog of product ideas — things that are feasible to build with
 <!-- Add entries here as ideas are created. Format: -->
 <!-- | [Title](ideas/YYYY-MM-DD-slug.md) | category | maturity | one-liner | -->
 
-| Idea | Category | Maturity | Summary |
-|------|----------|----------|---------|
-| [AI Experimentation Testbed](ideas/2026-04-11-ai-experimentation-testbed.md) | ai, infrastructure | raw | Enterprise-grade sandbox for rapidly prototyping and evaluating emerging AI tools, models, and frameworks against real-world use cases with structured scoring |
-| [FoodLoom — Family Recipe Keeper](ideas/2026-04-11-foodloom-family-recipe-keeper.md) | social-good, ai | raw | Voice-first mobile app that lets home cooks capture recipes by talking and taking photos as they cook, preserving family food traditions as a digital heirloom |
-| [Pet Companion Guide](ideas/2026-04-11-pet-companion-guide.md) | health, ai | raw | Science-backed daily companion app for pet owners with personalized reminders, at-home health checks, and life-stage guidance tailored to your specific pet |
+| Idea | Category | Maturity | Score | Summary |
+|------|----------|----------|-------|---------|
+| [FoodLoom — Family Recipe Keeper](ideas/2026-04-11-foodloom-family-recipe-keeper.md) | social-good, ai | raw | 8.5/10 | Voice-first mobile app that lets home cooks capture recipes by talking and taking photos as they cook, preserving family food traditions as a digital heirloom |
+| [Pet Companion Guide](ideas/2026-04-11-pet-companion-guide.md) | health, ai | raw | 7.0/10 | Science-backed daily companion app for pet owners with personalized reminders, at-home health checks, and life-stage guidance tailored to your specific pet |
+| [AI Experimentation Testbed](ideas/2026-04-11-ai-experimentation-testbed.md) | ai, infrastructure | raw | 6.5/10 | Enterprise-grade sandbox for rapidly prototyping and evaluating emerging AI tools, models, and frameworks against real-world use cases with structured scoring |
+
+## Rating Dimensions
+
+Each idea is scored across six dimensions (1-10 scale):
+
+| Dimension | What it measures |
+|-----------|-----------------|
+| Problem clarity | How clearly defined and universally felt is the pain? |
+| Market size | How large is the potential user base? |
+| Uniqueness | How differentiated is this from what exists? |
+| Feasibility | How buildable is this with today's technology? |
+| Monetization | How clear and viable are the revenue paths? |
+| Emotional pull | How strongly does this resonate on a human level? |
+
+**Overall score** = weighted average favoring problem clarity, uniqueness, and feasibility.
 
 ## Adding a New Idea
 

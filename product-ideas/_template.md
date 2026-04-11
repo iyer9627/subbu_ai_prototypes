@@ -35,6 +35,21 @@ What existing technologies, APIs, or frameworks would this leverage?
 - Risks or unknowns
 - Areas needing research
 
+## Rating — _/10
+
+*Rated: YYYY-MM-DD*
+
+| Dimension | Score | Notes |
+|-----------|-------|-------|
+| Problem clarity | _/10 | |
+| Market size | _/10 | |
+| Uniqueness | _/10 | |
+| Feasibility | _/10 | |
+| Monetization | _/10 | |
+| Emotional pull | _/10 | |
+
+**Verdict:**
+
 ## Notes / Raw Thoughts
 
 Dump any unstructured thinking here. Stream of consciousness is fine.

@@ -21,6 +21,7 @@ This project uses Linear for project management with a 4-environment deployment 
 - [Workflow Configuration](.linear/workflow-config.md)
 - [Bug Tracking Process](.linear/bug-tracking.md)
 - [Release Management](.linear/release-management.md)
+- [Product Ideas](product-ideas/README.md)
 - [Contributing Guide](docs/CONTRIBUTING.md)
 - [Branching Strategy](docs/BRANCHING_STRATEGY.md)
 
@@ -52,6 +53,10 @@ npm run dev
 │   ├── release-management.md   # Release process
 │   ├── SETUP.md               # Setup guide
 │   └── templates/              # Issue/PR templates
+├── product-ideas/              # Structured product idea catalog
+│   ├── README.md              # Index and categories
+│   ├── _template.md           # Template for new ideas
+│   └── ideas/                 # Individual idea files
 ├── docs/                       # Documentation
 │   ├── CONTRIBUTING.md        # Contributing guide
 │   └── BRANCHING_STRATEGY.md  # Git branching strategy

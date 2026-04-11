@@ -10,7 +10,7 @@ Generations of cooking knowledge live inside people's heads — never written do
 
 ## The Idea
 
-A voice-first mobile app that lets anyone — regardless of age or tech literacy — capture their recipes simply by talking and taking pictures as they cook.
+A voice-first, multilingual mobile app that lets anyone — regardless of age, tech literacy, or language — capture their recipes simply by talking and taking pictures as they cook.
 
 **How it works:**
 
@@ -31,11 +31,20 @@ A voice-first mobile app that lets anyone — regardless of age or tech literacy
 - Explore what others are cooking — discover recipes from different cultures, regions, families
 - Make any recipe your own — fork it, tweak it, save your version with your personal notes
 
+**Multilingual from the ground up:**
+
+- Speak in any language — Tamil, Spanish, Mandarin, Arabic, Hindi, Korean, whatever is natural to you. The app understands
+- Recipes are captured in the original language and can be cross-translated into any other supported language on demand
+- A grandmother can narrate in Telugu; her grandchild in the US reads it in English — or switches to Telugu to hear it in her words
+- This is critical for generational handoff: the current generation documents in their native tongue, the next generation consumes in theirs
+- Code-switching is handled naturally — if you mix English and Hindi mid-sentence, the app understands both
+
 **The family heirloom:**
 
 - The collected recipes become a digital family heirloom — a "FoodLoom" — woven together across generations
 - Children, grandchildren, extended family can access, contribute to, and carry forward the collection
 - The app preserves not just the recipe but the person behind it — their voice, their stories, their little touches
+- Cross-language access means the heirloom transcends language barriers within diaspora families
 
 ## Why Now?
 
@@ -61,7 +70,8 @@ A voice-first mobile app that lets anyone — regardless of age or tech literacy
 
 ## Key Technical Building Blocks
 
-- Speech-to-text (Whisper, Deepgram) for real-time voice capture with noise resilience
+- Multilingual speech-to-text (Whisper, Deepgram) for real-time voice capture with noise resilience, accent handling, and code-switching support
+- LLM-powered cross-translation layer — preserves culinary terms, cultural context, and ingredient names that don't have direct translations (e.g., keeping "jaggery" or "gochujang" intact with explanations)
 - LLM processing to convert narration into structured recipes (ingredients, steps, timing) while keeping personal anecdotes
 - Image recognition for food photography (identify dishes, ingredients, cooking stages)
 - Mobile-native app (React Native or Flutter) for iOS and Android — App Store and Google Play
@@ -79,7 +89,8 @@ A voice-first mobile app that lets anyone — regardless of age or tech literacy
 ## Open Questions
 
 - How to handle imprecise measurements ("a little bit," "to taste," "until it looks right") — approximate or preserve as-is?
-- Multilingual support from day one or start with English + one other language?
+- Which languages to prioritize first? (Hindi, Spanish, Mandarin, Tamil, Arabic are high-value given diaspora cooking traditions)
+- How to handle culinary terms that are untranslatable — transliterate and annotate?
 - How to handle recipe attribution and credit in the crowdsource layer?
 - Privacy model for family recipes — some are closely guarded secrets
 - Should the AI suggest improvements/substitutions, or is that overstepping the "preserve as-is" philosophy?
@@ -92,5 +103,7 @@ The magic here is capturing what was never captured before. Every family has dis
 The name "FoodLoom" captures it — weaving together threads of family food tradition into something lasting. It's not a social media platform. It's a family heirloom that happens to live on your phone.
 
 The emotional hook is huge: "What if you could cook your grandmother's exact dish, in her voice, twenty years from now?"
+
+Multilingual is not a feature — it's foundational. The families who need this most are often multilingual and multi-generational across countries. A grandmother in Chennai, a daughter in London, a granddaughter in San Francisco — all speaking different primary languages but sharing the same food. The app bridges that gap. Document in one language, consume in another, preserve the original always.
 
 The printed cookbook is the premium product that sells itself — a family cookbook with photos, stories, and recipes, professionally bound. People would pay real money for that at holidays and family reunions.

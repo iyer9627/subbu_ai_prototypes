@@ -38,6 +38,7 @@ A structured catalog of product ideas — things that are feasible to build with
 |------|----------|----------|-------|---------|
 | [FoodLoom — Family Recipe Keeper](ideas/2026-04-11-foodloom-family-recipe-keeper.md) | social-good, ai | raw | 8.5/10 | Voice-first mobile app that lets home cooks capture recipes by talking and taking photos as they cook, preserving family food traditions as a digital heirloom |
 | [OrgLens — Company Org Structure Intelligence](ideas/2026-04-11-orglens-company-org-intelligence.md) | ai, productivity, fintech | raw | 7.5/10 | AI platform that reconstructs company org structures from careers pages and correlates structural patterns with performance data for investors, M&A teams, and strategists |
+| [RepoForge — AI Project Consolidator](ideas/2026-04-17-repoforge-ai-project-consolidator.md) | productivity, ai, infrastructure | raw | 7.5/10 | Developer tool that scans scattered local projects, catalogs what each does, detects reusable patterns, and refactors them into scalable, consolidated code |
 | [Pet Companion Guide](ideas/2026-04-11-pet-companion-guide.md) | health, ai | raw | 7.0/10 | Science-backed daily companion app for pet owners with personalized reminders, at-home health checks, and life-stage guidance tailored to your specific pet |
 | [AI Experimentation Testbed](ideas/2026-04-11-ai-experimentation-testbed.md) | ai, infrastructure | raw | 6.5/10 | Enterprise-grade sandbox for rapidly prototyping and evaluating emerging AI tools, models, and frameworks against real-world use cases with structured scoring |
 

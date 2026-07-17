@@ -56,7 +56,7 @@ life-in-numbers/
 All date math and physiological estimates live in `LifeMetricsKit`, which takes an
 explicit `asOf: Date` and `Calendar` everywhere, so every number is deterministic
 and unit-tested. The app layer is purely presentational. The only dependency is
-[`mlx-swift-examples`](https://github.com/ml-explore/mlx-swift-examples)
+[`mlx-swift-lm`](https://github.com/ml-explore/mlx-swift-lm)
 (`MLXLLM` / `MLXLMCommon`), which powers the on-device Reflection feature.
 
 ## Running

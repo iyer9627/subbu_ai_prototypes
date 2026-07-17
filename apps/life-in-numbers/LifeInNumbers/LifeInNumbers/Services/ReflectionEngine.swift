@@ -40,7 +40,7 @@ final class ReflectionEngine {
         do {
             if session == nil || loadedModelID != modelID {
                 phase = .loadingModel(progress: nil)
-                let model = try await loadModel(id: modelID) { [weak self] progress in
+                let model = try await loadModelContainer(id: modelID) { [weak self] progress in
                     Task { @MainActor in
                         self?.phase = .loadingModel(progress: progress.fractionCompleted)
                     }

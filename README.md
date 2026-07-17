@@ -2,6 +2,12 @@
 
 AI prototyping playground with structured development workflow.
 
+## Prototypes
+
+| App | Platforms | Description |
+|-----|-----------|-------------|
+| [Life in Numbers](apps/life-in-numbers/) | macOS, iPhone | Your life quantified in real time — heartbeats, breaths, a life-in-weeks grid, and upcoming milestones. SwiftUI multiplatform + tested Swift package core. |
+
 ## Development Workflow
 
 This project uses Linear for project management with a 4-environment deployment pipeline.

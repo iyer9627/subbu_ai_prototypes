@@ -81,3 +81,10 @@ struct LifeGridView: View {
         }
     }
 }
+
+#Preview {
+    NavigationStack { LifeGridView() }
+        .environment(AppModel())
+        .fontDesign(.serif)
+        .tint(Theme.terracotta)
+}

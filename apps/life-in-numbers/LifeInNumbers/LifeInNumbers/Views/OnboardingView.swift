@@ -61,3 +61,10 @@ struct OnboardingView: View {
         }
     }
 }
+
+#Preview {
+    OnboardingView()
+        .environment(AppModel())
+        .fontDesign(.serif)
+        .tint(Theme.terracotta)
+}

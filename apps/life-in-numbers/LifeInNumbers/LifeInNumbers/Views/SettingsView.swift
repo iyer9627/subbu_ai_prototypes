@@ -41,3 +41,10 @@ struct SettingsView: View {
         #endif
     }
 }
+
+#Preview {
+    SettingsView()
+        .environment(AppModel())
+        .fontDesign(.serif)
+        .tint(Theme.terracotta)
+}

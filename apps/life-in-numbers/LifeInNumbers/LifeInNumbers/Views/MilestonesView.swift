@@ -63,3 +63,10 @@ struct MilestoneRowView: View {
         .paperCard()
     }
 }
+
+#Preview {
+    NavigationStack { MilestonesView() }
+        .environment(AppModel())
+        .fontDesign(.serif)
+        .tint(Theme.terracotta)
+}

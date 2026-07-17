@@ -84,3 +84,10 @@ struct MainView: View {
         }
     }
 }
+
+#Preview("App") {
+    RootView()
+        .environment(AppModel())
+        .fontDesign(.serif)
+        .tint(Theme.terracotta)
+}

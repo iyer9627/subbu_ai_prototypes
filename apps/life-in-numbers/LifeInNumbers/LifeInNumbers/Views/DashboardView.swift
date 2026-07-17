@@ -75,3 +75,10 @@ struct MetricCardView: View {
         return MetricFormatter.compact(metric.value)
     }
 }
+
+#Preview {
+    NavigationStack { DashboardView() }
+        .environment(AppModel())
+        .fontDesign(.serif)
+        .tint(Theme.terracotta)
+}

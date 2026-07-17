@@ -8,7 +8,8 @@
     "dev": "echo 'Add your dev server command here'",
     "build": "echo 'Add your build command here'",
     "test": "echo 'Add your test command here'",
-    "lint": "echo 'Add your lint command here'"
+    "lint": "echo 'Add your lint command here'",
+    "format:check": "echo 'Add your format check command here'"
   },
   "repository": {
     "type": "git",

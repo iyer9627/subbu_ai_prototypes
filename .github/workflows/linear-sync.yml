@@ -19,10 +19,14 @@ jobs:
     steps:
       - name: Extract Linear ID from PR/Issue
         id: extract
+        env:
+          # Passed via env (not inline interpolation) so quotes/backticks in
+          # titles or bodies can't break or inject into the shell script.
+          TITLE: ${{ github.event.pull_request.title || github.event.issue.title }}
+          BODY: ${{ github.event.pull_request.body || github.event.issue.body }}
         run: |
           # Extract LIN-XXX pattern from title or body
-          CONTENT="${{ github.event.pull_request.title || github.event.issue.title }} ${{ github.event.pull_request.body || github.event.issue.body }}"
-          LINEAR_ID=$(echo "$CONTENT" | grep -oE 'LIN-[0-9]+' | head -1 || echo "")
+          LINEAR_ID=$(printf '%s %s' "$TITLE" "$BODY" | grep -oE 'LIN-[0-9]+' | head -1 || echo "")
           echo "linear_id=$LINEAR_ID" >> $GITHUB_OUTPUT
           echo "Found Linear ID: $LINEAR_ID"
 

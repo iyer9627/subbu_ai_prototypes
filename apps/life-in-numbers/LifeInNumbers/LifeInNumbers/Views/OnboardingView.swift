@@ -11,9 +11,13 @@ struct OnboardingView: View {
             VStack(spacing: 28) {
                 Spacer()
 
-                Image(systemName: "hourglass")
-                    .font(.system(size: 56))
-                    .foregroundStyle(Theme.terracotta)
+                Image("OnboardingHero")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxHeight: 240)
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .shadow(color: .black.opacity(0.10), radius: 8, y: 4)
+                    .accessibilityLabel("A watercolor dog in a beret watching an hourglass")
 
                 VStack(spacing: 10) {
                     Text("Life in Numbers")

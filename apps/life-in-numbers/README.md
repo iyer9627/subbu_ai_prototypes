@@ -1,5 +1,9 @@
 # Life in Numbers
 
+<p align="center">
+  <img src="docs/hero.gif" alt="Watercolor dog in a beret watching an hourglass" width="340">
+</p>
+
 Your whole story, counted. Enter your birth date and watch your life quantified in
 real time — heartbeats, breaths, full moons, kilometers traveled around the Sun,
 and a "life in weeks" grid where every box is one week of an expected lifespan.

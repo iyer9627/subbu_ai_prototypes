@@ -18,6 +18,11 @@ A native **macOS + iPhone** app built from a single SwiftUI codebase.
   week 2,000, 2 billion seconds, the next trip around the Sun, the halfway point.
 - **Settings** — adjust birth date and life expectancy (40–120 years); everything
   recomputes instantly.
+- **Reflection** — a short essay about *your* numbers, written by an open-source
+  LLM (Qwen 2.5, 4-bit) running **fully on-device** via
+  [MLX](https://github.com/ml-explore/mlx). The weights (~300 MB) download once
+  from the Hugging Face hub on first use and are cached; after that it works
+  offline. No server, no API key — your birth date never leaves the device.
 
 ## Design
 
@@ -35,27 +40,35 @@ life-in-numbers/
 │   │   ├── LifeCalculator   # All statistics, deterministic & documented rates
 │   │   ├── WeeksGrid        # Life-in-weeks grid math
 │   │   ├── MilestoneGenerator # Upcoming round-number milestones
-│   │   └── MetricFormatter  # "2.1 billion"-style compact formatting
+│   │   ├── MetricFormatter  # "2.1 billion"-style compact formatting
+│   │   └── ReflectionPrompt # LLM prompt built from the metrics (pure, tested)
 │   └── Tests/               # XCTest suite for every calculation
 └── LifeInNumbers/           # SwiftUI multiplatform app (the face)
     ├── LifeInNumbers.xcodeproj  # Single target: iOS 17+ & macOS 14+
     └── LifeInNumbers/
         ├── Models/          # Observable app state, UserDefaults persistence
-        ├── Views/           # Onboarding, Dashboard, LifeGrid, Milestones, Settings
+        ├── Services/        # ReflectionEngine: on-device LLM via MLX
+        ├── Views/           # Onboarding, Dashboard, LifeGrid, Milestones,
+        │                    #   Reflection, Settings
         └── Theme/           # Watercolor palette + paper-card styling
 ```
 
 All date math and physiological estimates live in `LifeMetricsKit`, which takes an
 explicit `asOf: Date` and `Calendar` everywhere, so every number is deterministic
-and unit-tested. The app layer is purely presentational.
+and unit-tested. The app layer is purely presentational. The only dependency is
+[`mlx-swift-examples`](https://github.com/ml-explore/mlx-swift-examples)
+(`MLXLLM` / `MLXLMCommon`), which powers the on-device Reflection feature.
 
 ## Running
 
 1. Open `LifeInNumbers/LifeInNumbers.xcodeproj` in Xcode 16 or later.
-2. Pick a destination — **My Mac**, an iPhone simulator, or a device.
+2. Pick a destination — **My Mac** or an iPhone (simulator works for everything
+   except Reflection, which needs real Apple-silicon hardware).
 3. Run (⌘R). Tests: ⌘U (runs the `LifeMetricsKit` suite).
 
-No dependencies, no signing requirements beyond automatic signing.
+No signing requirements beyond automatic signing. The Reflection model can be
+swapped in Settings for any MLX-format chat model on the Hugging Face hub
+(e.g. a larger Qwen, Llama, or Gemma variant).
 
 ## Estimation rates
 

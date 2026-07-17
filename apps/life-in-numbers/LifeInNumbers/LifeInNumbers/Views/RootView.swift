@@ -16,6 +16,7 @@ enum AppSection: String, CaseIterable, Identifiable {
     case dashboard = "Numbers"
     case lifeGrid = "Life in Weeks"
     case milestones = "Milestones"
+    case reflection = "Reflection"
 
     var id: String { rawValue }
 
@@ -24,6 +25,7 @@ enum AppSection: String, CaseIterable, Identifiable {
         case .dashboard: "number.circle"
         case .lifeGrid: "square.grid.3x3"
         case .milestones: "flag.checkered"
+        case .reflection: "sparkles"
         }
     }
 }
@@ -81,6 +83,7 @@ struct MainView: View {
         case .dashboard: DashboardView()
         case .lifeGrid: LifeGridView()
         case .milestones: MilestonesView()
+        case .reflection: ReflectionView()
         }
     }
 }

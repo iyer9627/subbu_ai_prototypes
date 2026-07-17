@@ -22,6 +22,16 @@ struct SettingsView: View {
                         in: 40...120
                     )
                 }
+                Section("On-device reflection model") {
+                    TextField("Hugging Face model ID", text: $model.reflectionModelID)
+                        .autocorrectionDisabled()
+                        #if os(iOS)
+                        .textInputAutocapitalization(.never)
+                        #endif
+                    Text("Any MLX-format chat model from the Hugging Face hub. Downloaded once, then runs fully offline on this device. Default: \(AppModel.defaultReflectionModelID).")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
                 Section {
                     Text("Body counts use population averages (70 heartbeats and 14 breaths per minute, 8 hours of sleep). They are estimates for perspective, not medical data.")
                         .font(.caption)

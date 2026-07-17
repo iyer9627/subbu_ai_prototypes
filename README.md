@@ -6,7 +6,7 @@ AI prototyping playground with structured development workflow.
 
 | App | Platforms | Description |
 |-----|-----------|-------------|
-| [Life in Numbers](apps/life-in-numbers/) | macOS, iPhone | Your life quantified in real time — heartbeats, breaths, a life-in-weeks grid, and upcoming milestones. SwiftUI multiplatform + tested Swift package core. |
+| [Life in Numbers](apps/life-in-numbers/) | macOS, iPhone | Your life quantified in real time — heartbeats, breaths, a life-in-weeks grid, milestones, and an on-device open-source LLM (Qwen via MLX) that writes reflections on your numbers. SwiftUI multiplatform + tested Swift package core. |
 
 ## Development Workflow
 

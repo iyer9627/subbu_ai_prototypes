@@ -32,10 +32,10 @@ jobs:
           -destination 'platform=macOS'
           CODE_SIGNING_ALLOWED=NO
 
-      - name: Build app for iOS Simulator
+      - name: Build app for iOS
         run: >
           xcodebuild build
           -project apps/life-in-numbers/LifeInNumbers/LifeInNumbers.xcodeproj
           -scheme LifeInNumbers
-          -destination 'generic/platform=iOS Simulator'
+          -destination 'generic/platform=iOS'
           CODE_SIGNING_ALLOWED=NO

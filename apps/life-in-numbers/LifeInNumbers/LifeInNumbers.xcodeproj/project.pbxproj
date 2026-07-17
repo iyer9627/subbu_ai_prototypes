@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		FA0000000000000000000001 /* LifeMetricsKit in Frameworks */ = {isa = PBXBuildFile; productRef = FA0000000000000000000002 /* LifeMetricsKit */; };
+		FA0000000000000000000016 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = FA0000000000000000000014 /* MLXLLM */; };
+		FA0000000000000000000017 /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = FA0000000000000000000015 /* MLXLMCommon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA0000000000000000000001 /* LifeMetricsKit in Frameworks */,
+				FA0000000000000000000016 /* MLXLLM in Frameworks */,
+				FA0000000000000000000017 /* MLXLMCommon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +75,8 @@
 			name = LifeInNumbers;
 			packageProductDependencies = (
 				FA0000000000000000000002 /* LifeMetricsKit */,
+				FA0000000000000000000014 /* MLXLLM */,
+				FA0000000000000000000015 /* MLXLMCommon */,
 			);
 			productName = LifeInNumbers;
 			productReference = FA0000000000000000000004 /* LifeInNumbers.app */;
@@ -102,6 +108,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				FA0000000000000000000012 /* XCLocalSwiftPackageReference "../LifeMetricsKit" */,
+				FA0000000000000000000013 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FA0000000000000000000007 /* Products */;
@@ -350,10 +357,31 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		FA0000000000000000000013 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ml-explore/mlx-swift-examples";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		FA0000000000000000000002 /* LifeMetricsKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LifeMetricsKit;
+		};
+		FA0000000000000000000014 /* MLXLLM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA0000000000000000000013 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
+			productName = MLXLLM;
+		};
+		FA0000000000000000000015 /* MLXLMCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA0000000000000000000013 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
+			productName = MLXLMCommon;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

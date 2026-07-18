@@ -14,7 +14,7 @@ struct ReflectionView: View {
                     Text("A word for you")
                         .font(AppFont.serif(.title2, .semibold))
                         .foregroundStyle(Theme.ink)
-                    Text("Written on this device by \(model.reflectionModelID), an open-source model. Nothing leaves your \(deviceNoun).")
+                    Text("Written privately on this device. Nothing leaves your \(deviceNoun).")
                         .font(AppFont.serif(.subheadline))
                         .foregroundStyle(Theme.inkSecondary)
                 }

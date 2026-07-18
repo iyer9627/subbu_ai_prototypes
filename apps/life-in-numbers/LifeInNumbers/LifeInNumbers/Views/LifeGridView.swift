@@ -12,52 +12,27 @@ struct LifeGridView: View {
 
     var body: some View {
         let grid = MonthsGrid(profile: model.profile, asOf: .now, calculator: model.calculator)
-        ScrollViewReader { scroller in
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    ArtHeader(imageName: "GridArt",
-                              label: "A watercolor dog lying on a grid of colored squares")
-                    summary(for: grid)
-                    gridCanvas(for: grid)
-                        .padding(12)
-                        .paperCard()
-                        .overlay(currentMonthAnchor(for: grid))
-                    legend
-                    diaryList
-                }
-                .padding()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                ArtHeader(imageName: "GridArt",
+                          label: "A watercolor dog lying on a grid of colored squares")
+                summary(for: grid)
+                gridCanvas(for: grid)
+                    .padding(12)
+                    .paperCard()
+                legend
+                diaryList
             }
-            .onAppear {
-                model.seedDiaryIfNeeded()
-                // This is a journal: open it to today's page. Give layout one
-                // beat to settle, then center the pulsing current month.
-                Task { @MainActor in
-                    try? await Task.sleep(for: .milliseconds(80))
-                    withAnimation(.easeInOut(duration: 0.6)) {
-                        scroller.scrollTo("currentMonth", anchor: .center)
-                    }
-                }
-            }
+            .padding()
+        }
+        .onAppear {
+            model.seedDiaryIfNeeded()
         }
         .background(Theme.paper)
         .navigationTitle("Life in Months")
         .sheet(item: $editing) { selection in
             MemoryEditorView(selection: selection, monthsLived: grid.monthsLived)
         }
-    }
-
-    /// An invisible marker sitting over the current month's row of the
-    /// canvas, giving the scroll view something to scroll to.
-    private func currentMonthAnchor(for grid: MonthsGrid) -> some View {
-        GeometryReader { geo in
-            let row = grid.monthsLived / MonthsGrid.columnsPerRow
-            let fraction = (CGFloat(row) + 0.5) / CGFloat(max(grid.rows, 1))
-            Color.clear
-                .frame(width: 1, height: 1)
-                .position(x: geo.size.width / 2, y: geo.size.height * fraction)
-                .id("currentMonth")
-        }
-        .allowsHitTesting(false)
     }
 
     private func summary(for grid: MonthsGrid) -> some View {
@@ -242,10 +217,8 @@ struct MemoryRowView: View {
                         .foregroundStyle(Theme.inkSecondary)
                         .italic()
                 }
-                if event.audioFilename != nil {
-                    Label("Voice note", systemImage: "waveform")
-                        .font(AppFont.serif(.caption2))
-                        .foregroundStyle(Theme.dustyBlue)
+                if let filename = event.audioFilename {
+                    VoiceNotePlayButton(url: MemoryMediaStore.url(for: filename))
                 }
             }
             Spacer()
@@ -274,6 +247,26 @@ struct MemoryRowView: View {
         let age = event.monthIndex / 12
         let formatted = date.formatted(.dateTime.month(.wide).year())
         return age == 0 ? formatted : "Age \(age) · \(formatted)"
+    }
+}
+
+/// A tiny, tappable play/stop control for a memory's voice note. Owns its
+/// own playback session so multiple rows can each play independently.
+struct VoiceNotePlayButton: View {
+    let url: URL
+
+    @State private var session = VoiceNoteSession()
+
+    var body: some View {
+        Button {
+            session.togglePlayback(of: url)
+        } label: {
+            Label(session.isPlaying ? "Stop" : "Play voice note",
+                  systemImage: session.isPlaying ? "stop.circle.fill" : "play.circle")
+                .font(AppFont.serif(.caption))
+                .foregroundStyle(Theme.dustyBlue)
+        }
+        .buttonStyle(.borderless)
     }
 }
 

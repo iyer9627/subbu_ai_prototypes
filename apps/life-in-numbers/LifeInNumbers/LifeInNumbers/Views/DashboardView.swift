@@ -84,6 +84,18 @@ struct MetricCardView: View {
         .contentShape(Rectangle())
         .onTapGesture { flip() }
         .accessibilityHint(flippable ? "Tap to flip for a real-world comparison" : "")
+        // Interest/place changed in Settings — clear the stale pool and
+        // flip back rather than leaving an empty back face showing.
+        .onChange(of: model.interest) { resetFacts() }
+        .onChange(of: model.profile.placeOfBirth) { resetFacts() }
+    }
+
+    private func resetFacts() {
+        factOrder = []
+        factIndex = 0
+        withAnimation(.spring(duration: 0.5)) {
+            isFlipped = false
+        }
     }
 
     private func flip() {

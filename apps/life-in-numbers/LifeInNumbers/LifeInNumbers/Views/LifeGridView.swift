@@ -52,7 +52,10 @@ struct LifeGridView: View {
         let spacing = 2.0
         return Canvas { context, size in
             let cell = (size.width - CGFloat(columns - 1) * spacing) / CGFloat(columns)
-            let eventMonths = Dictionary(uniqueKeysWithValues: model.events.map { ($0.monthIndex, $0) })
+            // Two memories can share a month (e.g. one moved onto another),
+            // so never build this with uniqueKeysWithValues — it traps.
+            let eventMonths = Dictionary(model.events.map { ($0.monthIndex, $0) },
+                                         uniquingKeysWith: { first, _ in first })
             for month in 0..<grid.totalMonths {
                 let row = month / columns
                 let column = month % columns

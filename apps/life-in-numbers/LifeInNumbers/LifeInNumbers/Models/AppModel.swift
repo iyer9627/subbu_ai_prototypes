@@ -8,6 +8,8 @@ final class AppModel {
     private enum Keys {
         static let birthDate = "profile.birthDate"
         static let lifeExpectancy = "profile.lifeExpectancyYears"
+        static let gender = "profile.gender"
+        static let placeOfBirth = "profile.placeOfBirth"
         static let hasOnboarded = "profile.hasOnboarded"
         static let reflectionModelID = "reflection.modelID"
         static let lastReflection = "reflection.lastText"
@@ -57,7 +59,12 @@ final class AppModel {
         let storedExpectancy = defaults.object(forKey: Keys.lifeExpectancy) as? Int
         let birthDate = storedInterval.map(Date.init(timeIntervalSinceReferenceDate:))
             ?? Calendar.current.date(byAdding: .year, value: -30, to: .now) ?? .now
-        self.profile = LifeProfile(birthDate: birthDate, lifeExpectancyYears: storedExpectancy ?? 80)
+        self.profile = LifeProfile(
+            birthDate: birthDate,
+            lifeExpectancyYears: storedExpectancy ?? 80,
+            gender: defaults.string(forKey: Keys.gender),
+            placeOfBirth: defaults.string(forKey: Keys.placeOfBirth)
+        )
         self.hasOnboarded = defaults.bool(forKey: Keys.hasOnboarded)
         self.reflectionModelID = defaults.string(forKey: Keys.reflectionModelID) ?? Self.defaultReflectionModelID
         self.lastReflection = defaults.string(forKey: Keys.lastReflection)
@@ -104,5 +111,7 @@ final class AppModel {
     private func persist() {
         defaults.set(profile.birthDate.timeIntervalSinceReferenceDate, forKey: Keys.birthDate)
         defaults.set(profile.lifeExpectancyYears, forKey: Keys.lifeExpectancy)
+        defaults.set(profile.gender, forKey: Keys.gender)
+        defaults.set(profile.placeOfBirth, forKey: Keys.placeOfBirth)
     }
 }

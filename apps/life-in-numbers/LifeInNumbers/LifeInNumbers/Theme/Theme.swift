@@ -11,17 +11,20 @@ enum Theme {
                            dark: Color(red: 0.92, green: 0.90, blue: 0.85))
     static let inkSecondary = Color(light: Color(red: 0.45, green: 0.43, blue: 0.38),
                                     dark: Color(red: 0.70, green: 0.68, blue: 0.62))
-    static let terracotta = Color(light: Color(red: 0.77, green: 0.40, blue: 0.31),
-                                  dark: Color(red: 0.85, green: 0.48, blue: 0.38))
-    static let dustyBlue = Color(light: Color(red: 0.44, green: 0.54, blue: 0.66),
-                                 dark: Color(red: 0.55, green: 0.65, blue: 0.78))
+    /// Muted rose — from the painted grid squares and the red beret, kept
+    /// soft and neutral rather than orange.
+    static let terracotta = Color(light: Color(red: 0.69, green: 0.47, blue: 0.44),
+                                  dark: Color(red: 0.78, green: 0.56, blue: 0.53))
+    static let dustyBlue = Color(light: Color(red: 0.45, green: 0.54, blue: 0.64),
+                                 dark: Color(red: 0.56, green: 0.65, blue: 0.76))
     static let sage = Color(light: Color(red: 0.55, green: 0.60, blue: 0.44),
                             dark: Color(red: 0.62, green: 0.68, blue: 0.50))
     static let faded = Color(light: Color(red: 0.85, green: 0.82, blue: 0.75),
                              dark: Color(red: 0.30, green: 0.29, blue: 0.26))
 
-    /// Pigments cycled across the metric cards.
-    static let pigments: [Color] = [terracotta, dustyBlue, sage]
+    /// Pigments cycled across the metric cards — slate blue leads, keeping
+    /// the app's overall cast neutral like the watercolor skies.
+    static let pigments: [Color] = [dustyBlue, sage, terracotta]
 
     static func pigment(at index: Int) -> Color {
         pigments[index % pigments.count]
@@ -44,18 +47,23 @@ extension Color {
     }
 }
 
-/// Card container with the soft, hand-drawn look used across the app.
+/// Card container with the look of a scrap torn from a sketchbook: deckled
+/// edges, warm paper fill, a faint pencil-line border.
 struct PaperCard: ViewModifier {
+    /// Stable per-card so the tear doesn't shimmer on re-render.
+    @State private var seed = UInt64.random(in: 1...UInt64.max)
+
     func body(content: Content) -> some View {
-        content
+        let shape = TornPaperShape(seed: seed)
+        return content
             .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                shape
                     .fill(Theme.card)
-                    .shadow(color: .black.opacity(0.08), radius: 6, y: 3)
+                    .shadow(color: .black.opacity(0.10), radius: 5, y: 3)
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .strokeBorder(Theme.faded, lineWidth: 1)
+                shape
+                    .stroke(Theme.faded, lineWidth: 1)
             )
     }
 }

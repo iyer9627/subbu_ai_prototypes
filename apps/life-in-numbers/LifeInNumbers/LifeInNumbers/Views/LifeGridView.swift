@@ -36,10 +36,10 @@ struct LifeGridView: View {
     private func summary(for grid: MonthsGrid) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("\(grid.monthsLived.formatted()) months lived")
-                .font(.title2.weight(.semibold))
+                .font(AppFont.serif(.title2, .semibold))
                 .foregroundStyle(Theme.ink)
             Text("Each box is one month; each row is one year. Tap a month to keep a memory there.")
-                .font(.subheadline)
+                .font(AppFont.serif(.subheadline))
                 .foregroundStyle(Theme.inkSecondary)
         }
     }
@@ -50,8 +50,11 @@ struct LifeGridView: View {
         let columns = MonthsGrid.columnsPerRow
         let rows = grid.rows
         let spacing = 2.0
-        return Canvas { context, size in
+        // The animation timeline makes the current month breathe gently.
+        return TimelineView(.animation(minimumInterval: 1.0 / 12)) { timeline in
+        Canvas { context, size in
             let cell = (size.width - CGFloat(columns - 1) * spacing) / CGFloat(columns)
+            let pulse = 0.55 + 0.45 * (0.5 + 0.5 * sin(timeline.date.timeIntervalSinceReferenceDate * 2))
             // Two memories can share a month (e.g. one moved onto another),
             // so never build this with uniqueKeysWithValues — it traps.
             let eventMonths = Dictionary(model.events.map { ($0.monthIndex, $0) },
@@ -69,7 +72,7 @@ struct LifeGridView: View {
                 if eventMonths[month] != nil {
                     context.fill(path, with: .color(Theme.sage))
                 } else if grid.isCurrent(month: month) {
-                    context.fill(path, with: .color(Theme.dustyBlue))
+                    context.fill(path, with: .color(Theme.dustyBlue.opacity(pulse)))
                 } else if grid.isLived(month: month) {
                     context.fill(path, with: .color(Theme.terracotta.opacity(0.55)))
                 } else {
@@ -127,7 +130,7 @@ struct LifeGridView: View {
             legendItem(color: Theme.sage, label: "Memory")
             legendItem(color: Theme.faded, label: "Ahead")
         }
-        .font(.caption)
+        .font(AppFont.serif(.caption))
         .foregroundStyle(Theme.inkSecondary)
     }
 
@@ -143,11 +146,11 @@ struct LifeGridView: View {
     private var diaryList: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Memories")
-                .font(.title3.weight(.semibold))
+                .font(AppFont.serif(.title3, .semibold))
                 .foregroundStyle(Theme.ink)
             if model.events.isEmpty {
                 Text("Tap any lived month above to keep your first memory.")
-                    .font(.subheadline)
+                    .font(AppFont.serif(.subheadline))
                     .foregroundStyle(Theme.inkSecondary)
             }
             ForEach(model.events) { event in
@@ -182,21 +185,21 @@ struct MemoryRowView: View {
                 .background(RoundedRectangle(cornerRadius: 10).fill(Theme.sage))
             VStack(alignment: .leading, spacing: 2) {
                 Text(event.title)
-                    .font(.headline)
+                    .font(AppFont.serif(.headline, .semibold))
                     .foregroundStyle(Theme.ink)
                 Text(Self.subtitle(for: event, birthDate: birthDate))
-                    .font(.caption)
+                    .font(AppFont.serif(.caption))
                     .foregroundStyle(Theme.inkSecondary)
                 if let note = event.note, !note.isEmpty {
                     Text(note)
-                        .font(.caption)
+                        .font(AppFont.serif(.caption))
                         .foregroundStyle(Theme.inkSecondary)
                         .italic()
                 }
             }
             Spacer()
             Image(systemName: "chevron.right")
-                .font(.caption)
+                .font(AppFont.serif(.caption))
                 .foregroundStyle(Theme.faded)
         }
         .padding(12)
@@ -215,5 +218,5 @@ struct MemoryRowView: View {
     NavigationStack { LifeGridView() }
         .environment(AppModel())
         .fontDesign(.serif)
-        .tint(Theme.terracotta)
+        .tint(Theme.dustyBlue)
 }

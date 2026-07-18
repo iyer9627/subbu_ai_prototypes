@@ -92,5 +92,5 @@ struct MainView: View {
     RootView()
         .environment(AppModel())
         .fontDesign(.serif)
-        .tint(Theme.terracotta)
+        .tint(Theme.dustyBlue)
 }

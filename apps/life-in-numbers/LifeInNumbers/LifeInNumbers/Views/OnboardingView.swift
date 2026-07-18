@@ -4,6 +4,8 @@ import LifeMetricsKit
 struct OnboardingView: View {
     @Environment(AppModel.self) private var model
     @State private var birthDate = Calendar.current.date(byAdding: .year, value: -30, to: .now) ?? .now
+    @State private var gender = ""
+    @State private var placeOfBirth = ""
 
     var body: some View {
         ZStack {
@@ -15,16 +17,17 @@ struct OnboardingView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(maxHeight: 240)
+                    .overlay(LoopingVideoView(resourceName: "hero"))
                     .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                     .shadow(color: .black.opacity(0.10), radius: 8, y: 4)
-                    .accessibilityLabel("A watercolor dog in a beret watching an hourglass")
+                    .accessibilityLabel("A watercolor dog in a beret watching an hourglass, gently animated")
 
                 VStack(spacing: 10) {
                     Text("Life in Numbers")
-                        .font(.largeTitle.weight(.semibold))
+                        .font(AppFont.serif(.largeTitle, .semibold))
                         .foregroundStyle(Theme.ink)
                     Text("Your whole story, counted. Heartbeats, breaths, weeks, and trips around the Sun — all from one date.")
-                        .font(.body)
+                        .font(AppFont.serif(.body))
                         .foregroundStyle(Theme.inkSecondary)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: 420)
@@ -32,7 +35,7 @@ struct OnboardingView: View {
 
                 VStack(spacing: 16) {
                     Text("When were you born?")
-                        .font(.headline)
+                        .font(AppFont.serif(.headline, .semibold))
                         .foregroundStyle(Theme.ink)
                     DatePicker(
                         "Birth date",
@@ -43,6 +46,21 @@ struct OnboardingView: View {
                     .labelsHidden()
                     .datePickerStyle(.graphical)
                     .frame(maxWidth: 360)
+
+                    Divider()
+
+                    HStack(spacing: 12) {
+                        Picker("Gender", selection: $gender) {
+                            Text("Gender (optional)").tag("")
+                            ForEach(["Woman", "Man", "Non-binary", "Prefer not to say"], id: \.self) {
+                                Text($0).tag($0)
+                            }
+                        }
+                        .labelsHidden()
+                        TextField("Born in… (optional)", text: $placeOfBirth)
+                            .textFieldStyle(.roundedBorder)
+                    }
+                    .frame(maxWidth: 360)
                 }
                 .padding(24)
                 .paperCard()
@@ -50,10 +68,12 @@ struct OnboardingView: View {
 
                 Button {
                     model.profile.birthDate = birthDate
+                    model.profile.gender = gender.isEmpty ? nil : gender
+                    model.profile.placeOfBirth = placeOfBirth.isEmpty ? nil : placeOfBirth
                     model.hasOnboarded = true
                 } label: {
                     Text("Count My Life")
-                        .font(.headline)
+                        .font(AppFont.serif(.headline, .semibold))
                         .padding(.horizontal, 28)
                         .padding(.vertical, 12)
                 }
@@ -70,5 +90,5 @@ struct OnboardingView: View {
     OnboardingView()
         .environment(AppModel())
         .fontDesign(.serif)
-        .tint(Theme.terracotta)
+        .tint(Theme.dustyBlue)
 }

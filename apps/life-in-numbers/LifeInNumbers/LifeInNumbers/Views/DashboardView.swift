@@ -29,10 +29,10 @@ struct DashboardView: View {
     private func header(asOf date: Date) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("Since \(model.profile.birthDate.formatted(date: .long, time: .omitted))")
-                .font(.title2.weight(.semibold))
+                .font(AppFont.serif(.title2, .semibold))
                 .foregroundStyle(Theme.ink)
             Text("every number below has been counting.")
-                .font(.subheadline)
+                .font(AppFont.serif(.subheadline))
                 .foregroundStyle(Theme.inkSecondary)
         }
     }
@@ -77,22 +77,22 @@ struct MetricCardView: View {
                     .font(.title3)
                     .foregroundStyle(pigment)
                 Text(metric.title)
-                    .font(.subheadline.weight(.medium))
+                    .font(AppFont.serif(.subheadline, .medium))
                     .foregroundStyle(Theme.inkSecondary)
                 Spacer()
                 if fact != nil {
                     Image(systemName: "arrow.2.squarepath")
-                        .font(.caption)
+                        .font(AppFont.serif(.caption))
                         .foregroundStyle(Theme.faded)
                 }
             }
             Text(formattedValue)
-                .font(.system(.title, design: .serif).weight(.semibold))
+                .font(AppFont.serif(.title, .semibold))
                 .foregroundStyle(Theme.ink)
                 .contentTransition(.numericText())
                 .monospacedDigit()
             Text(metric.detail)
-                .font(.caption)
+                .font(AppFont.serif(.caption))
                 .foregroundStyle(Theme.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -109,11 +109,11 @@ struct MetricCardView: View {
                     .font(.title3)
                     .foregroundStyle(pigment)
                 Text("For scale")
-                    .font(.subheadline.weight(.medium))
+                    .font(AppFont.serif(.subheadline, .medium))
                     .foregroundStyle(Theme.inkSecondary)
                 Spacer()
                 Image(systemName: "arrow.2.squarepath")
-                    .font(.caption)
+                    .font(AppFont.serif(.caption))
                     .foregroundStyle(Theme.faded)
             }
             Group {
@@ -123,12 +123,12 @@ struct MetricCardView: View {
                     Text("Your \(formattedValue) \(metric.unit ?? "") — \(comparison).")
                 }
             }
-            .font(.system(.subheadline, design: .serif))
+            .font(AppFont.serif(.subheadline))
             .foregroundStyle(Theme.ink)
             .fixedSize(horizontal: false, vertical: true)
 
             Text("Source: \(fact.source)")
-                .font(.caption2)
+                .font(AppFont.serif(.caption2))
                 .foregroundStyle(Theme.inkSecondary)
 
             if ReflectionEngine.isSupported {
@@ -140,7 +140,7 @@ struct MetricCardView: View {
                     } else {
                         Label(riff == nil ? "Let Qwen say it" : "Again",
                               systemImage: "sparkles")
-                            .font(.caption)
+                            .font(AppFont.serif(.caption))
                     }
                 }
                 .buttonStyle(.bordered)
@@ -178,5 +178,5 @@ struct MetricCardView: View {
     NavigationStack { DashboardView() }
         .environment(AppModel())
         .fontDesign(.serif)
-        .tint(Theme.terracotta)
+        .tint(Theme.dustyBlue)
 }

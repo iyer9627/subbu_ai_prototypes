@@ -24,6 +24,12 @@ public enum ReflectionPrompt {
         var lines: [String] = []
         lines.append("Today is \(date.formatted(date: .long, time: .omitted)).")
         lines.append("Born \(profile.birthDate.formatted(date: .long, time: .omitted)).")
+        if let place = profile.placeOfBirth, !place.isEmpty {
+            lines.append("Born in \(place).")
+        }
+        if let gender = profile.gender, !gender.isEmpty {
+            lines.append("They describe themselves as: \(gender). Refer to them only as \"you\" — never in the third person.")
+        }
         lines.append("")
         lines.append("Life so far:")
         for metric in metrics {

@@ -75,6 +75,8 @@ public enum FactBank {
             return "almost exactly the \(factValue) \(fact.text)"
         case 1.05...:
             return "about \(formattedRatio(ratio))× the \(factValue) \(fact.text)"
+        case 0.55..<0.95:
+            return "about \(Int((ratio * 100).rounded()))% of the \(factValue) \(fact.text)"
         default:
             return "about 1/\(formattedRatio(1 / ratio)) of the \(factValue) \(fact.text)"
         }

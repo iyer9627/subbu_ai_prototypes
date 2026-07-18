@@ -42,6 +42,10 @@ final class FactBankTests: XCTestCase {
         let smaller = FactBank.comparison(of: 96_100, with: moon)
         XCTAssertTrue(smaller.contains("1/4"), smaller)
 
+        // Just-under ratios read as percentages, not awkward "1/1.2" fractions.
+        let nearlyThere = FactBank.comparison(of: 319_052, with: moon)
+        XCTAssertTrue(nearlyThere.contains("83%"), nearlyThere)
+
         // The multiplier is computed, and the fact value appears verbatim.
         XCTAssertTrue(bigger.contains("384,400") || bigger.contains("384"), bigger)
     }

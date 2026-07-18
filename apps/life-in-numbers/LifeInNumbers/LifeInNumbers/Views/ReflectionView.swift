@@ -12,10 +12,10 @@ struct ReflectionView: View {
             VStack(alignment: .leading, spacing: 16) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("A word from the machine")
-                        .font(.title2.weight(.semibold))
+                        .font(AppFont.serif(.title2, .semibold))
                         .foregroundStyle(Theme.ink)
                     Text("Written on this device by \(model.reflectionModelID), an open-source model. Nothing leaves your \(deviceNoun).")
-                        .font(.subheadline)
+                        .font(AppFont.serif(.subheadline))
                         .foregroundStyle(Theme.inkSecondary)
                 }
 
@@ -43,10 +43,10 @@ struct ReflectionView: View {
     private var unsupportedCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Not available here", systemImage: "cpu")
-                .font(.headline)
+                .font(AppFont.serif(.headline, .semibold))
                 .foregroundStyle(Theme.ink)
             Text("On-device generation needs Apple silicon and a real device — it doesn't run in the simulator or on Intel Macs.")
-                .font(.subheadline)
+                .font(AppFont.serif(.subheadline))
                 .foregroundStyle(Theme.inkSecondary)
         }
         .padding(16)
@@ -61,13 +61,13 @@ struct ReflectionView: View {
             case .loadingModel(let progress):
                 VStack(alignment: .leading, spacing: 8) {
                     Label("Fetching the model", systemImage: "arrow.down.circle")
-                        .font(.headline)
+                        .font(AppFont.serif(.headline, .semibold))
                         .foregroundStyle(Theme.ink)
                     if let progress {
                         ProgressView(value: progress)
                             .tint(Theme.dustyBlue)
                         Text("\(Int(progress * 100))% — one-time download, cached for offline use")
-                            .font(.caption)
+                            .font(AppFont.serif(.caption))
                             .foregroundStyle(Theme.inkSecondary)
                     } else {
                         ProgressView()
@@ -77,23 +77,23 @@ struct ReflectionView: View {
                 HStack(spacing: 10) {
                     ProgressView()
                     Text("Thinking about your \(MetricFormatter.compact(model.calculator.heartbeats(for: model.profile, asOf: .now))) heartbeats…")
-                        .font(.subheadline)
+                        .font(AppFont.serif(.subheadline))
                         .foregroundStyle(Theme.inkSecondary)
                 }
             case .failed(let message):
                 Label(message, systemImage: "exclamationmark.triangle")
-                    .font(.subheadline)
+                    .font(AppFont.serif(.subheadline))
                     .foregroundStyle(Theme.terracotta)
             case .idle:
                 if let reflection = model.lastReflection {
                     Text(reflection)
-                        .font(.system(.body, design: .serif))
+                        .font(AppFont.serif(.body))
                         .foregroundStyle(Theme.ink)
                         .lineSpacing(4)
                         .textSelection(.enabled)
                     if let date = model.lastReflectionDate {
                         Text(date.formatted(date: .abbreviated, time: .shortened))
-                            .font(.caption)
+                            .font(AppFont.serif(.caption))
                             .foregroundStyle(Theme.inkSecondary)
                     }
                 } else {
@@ -105,7 +105,7 @@ struct ReflectionView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                         .accessibilityLabel("A watercolor dog in a beret watching moons from a rooftop")
                     Text("Your numbers, read back to you as a few sentences. The first run downloads the model (about 300 MB); after that it works offline.")
-                        .font(.subheadline)
+                        .font(AppFont.serif(.subheadline))
                         .foregroundStyle(Theme.inkSecondary)
                 }
             }
@@ -121,7 +121,7 @@ struct ReflectionView: View {
         } label: {
             Label(model.lastReflection == nil ? "Write My Reflection" : "Write Another",
                   systemImage: "sparkles")
-                .font(.headline)
+                .font(AppFont.serif(.headline, .semibold))
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
         }
@@ -153,5 +153,5 @@ struct ReflectionView: View {
     NavigationStack { ReflectionView() }
         .environment(AppModel())
         .fontDesign(.serif)
-        .tint(Theme.terracotta)
+        .tint(Theme.dustyBlue)
 }

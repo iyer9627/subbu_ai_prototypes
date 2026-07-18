@@ -31,6 +31,18 @@ A native **macOS + iPhone** app built from a single SwiftUI codebase.
   chronological memories list below the grid mirrors everything accessibly.
 - **Milestones** — upcoming round numbers worth celebrating: your 15,000th day,
   week 2,000, 2 billion seconds, the next trip around the Sun, the halfway point.
+- **Milestone flips** — flip an upcoming milestone for a verbatim line from a
+  beloved book whose author was your age when it was published (Tolkien was 45
+  when The Hobbit came out…). Twenty curated, attributed quotes; a fresh one on
+  every flip; the on-device model can add a connecting thought, grounded in the
+  quote it is handed.
+- **Personal** — optional gender and place of birth shape the written
+  reflections; a curated model picker shows only models this device's memory
+  can run (0.5B → 7B).
+- **Design** — EB Garamond (SIL OFL) throughout, torn-paper card edges, a
+  living watercolor hero (looping video), Ken Burns drift on tab art, and a
+  breathing current-month cell in the grid. On macOS the app also lives in the
+  menu bar with live numbers.
 - **Settings** — adjust birth date and life expectancy (40–120 years); everything
   recomputes instantly.
 - **Reflection** — a short essay about *your* numbers, written by an open-source

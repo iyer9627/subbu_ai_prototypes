@@ -46,7 +46,7 @@ struct MemoryEditorView: View {
 
                     VStack(alignment: .leading, spacing: 6) {
                         Text("In my words (optional)")
-                            .font(.caption)
+                            .font(AppFont.serif(.caption))
                             .foregroundStyle(Theme.inkSecondary)
                         TextField("What happened?", text: $title)
                             .textFieldStyle(.roundedBorder)
@@ -95,10 +95,10 @@ struct MemoryEditorView: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(monthLabel(for: monthIndex))
-                .font(.title2.weight(.semibold))
+                .font(AppFont.serif(.title2, .semibold))
                 .foregroundStyle(Theme.ink)
             Text("A month of your life. What do you remember?")
-                .font(.subheadline)
+                .font(AppFont.serif(.subheadline))
                 .foregroundStyle(Theme.inkSecondary)
         }
     }
@@ -137,7 +137,7 @@ struct MemoryEditorView: View {
                     symbolName = suggestion.symbol
                 } label: {
                     Text(suggestion.title)
-                        .font(.subheadline)
+                        .font(AppFont.serif(.subheadline))
                         .lineLimit(1)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
@@ -152,7 +152,7 @@ struct MemoryEditorView: View {
     private var monthPicker: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("When was it?")
-                .font(.caption)
+                .font(AppFont.serif(.caption))
                 .foregroundStyle(Theme.inkSecondary)
             HStack {
                 Button {
@@ -164,7 +164,7 @@ struct MemoryEditorView: View {
                 .disabled(monthIndex == 0)
 
                 Text(monthLabel(for: monthIndex))
-                    .font(.headline)
+                    .font(AppFont.serif(.headline, .semibold))
                     .foregroundStyle(Theme.ink)
                     .frame(maxWidth: .infinity)
                     .contentTransition(.numericText())
@@ -194,7 +194,7 @@ struct MemoryEditorView: View {
             dismiss()
         } label: {
             Label("Keep this memory", systemImage: "checkmark")
-                .font(.headline)
+                .font(AppFont.serif(.headline, .semibold))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 6)
         }

@@ -7,6 +7,10 @@ struct OnboardingView: View {
     @State private var gender = ""
     @State private var placeOfBirth = ""
     @State private var interest: Interest = .books
+    @State private var cityAutocomplete = CityAutocomplete()
+    /// Tracks the last tapped suggestion so re-showing it isn't triggered by
+    /// the onChange fired when the field is filled programmatically.
+    @State private var chosenPlaceOfBirth: String?
 
     var body: some View {
         ZStack {
@@ -38,15 +42,8 @@ struct OnboardingView: View {
                     Text("When were you born?")
                         .font(AppFont.serif(.headline, .semibold))
                         .foregroundStyle(Theme.ink)
-                    DatePicker(
-                        "Birth date",
-                        selection: $birthDate,
-                        in: ...Date.now,
-                        displayedComponents: .date
-                    )
-                    .labelsHidden()
-                    .datePickerStyle(.graphical)
-                    .frame(maxWidth: 360)
+                    BirthDatePicker(date: $birthDate)
+                        .frame(maxWidth: 360)
 
                     Divider()
 
@@ -60,8 +57,35 @@ struct OnboardingView: View {
                         .labelsHidden()
                         TextField("Born in… (optional)", text: $placeOfBirth)
                             .textFieldStyle(.roundedBorder)
+                            .onChange(of: placeOfBirth) { _, newValue in
+                                if newValue == chosenPlaceOfBirth {
+                                    cityAutocomplete.clear()
+                                } else {
+                                    chosenPlaceOfBirth = nil
+                                    cityAutocomplete.update(query: newValue)
+                                }
+                            }
                     }
                     .frame(maxWidth: 360)
+
+                    if !cityAutocomplete.suggestions.isEmpty {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(cityAutocomplete.suggestions.prefix(5), id: \.self) { suggestion in
+                                Button {
+                                    placeOfBirth = suggestion
+                                    chosenPlaceOfBirth = suggestion
+                                    cityAutocomplete.clear()
+                                } label: {
+                                    Text(suggestion)
+                                        .font(AppFont.serif(.callout))
+                                        .foregroundStyle(Theme.dustyBlue)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        .frame(maxWidth: 360)
+                    }
 
                     Picker("What do you love?", selection: $interest) {
                         ForEach(Interest.allCases) { option in

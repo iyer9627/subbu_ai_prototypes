@@ -14,7 +14,7 @@ struct MilestonesView: View {
                     Text("Coming up")
                         .font(AppFont.serif(.title2, .semibold))
                         .foregroundStyle(Theme.ink)
-                    Text("Round numbers worth celebrating. Flip one for a line written by an author who was your age then.")
+                    Text("Round numbers worth celebrating. Flip one for a line from \(quoteSourceNoun) who was your age then.")
                         .font(AppFont.serif(.subheadline))
                         .foregroundStyle(Theme.inkSecondary)
                 }
@@ -34,6 +34,20 @@ struct MilestonesView: View {
 
     private func ageAt(_ date: Date) -> Int {
         max(0, Calendar.current.dateComponents([.year], from: model.profile.birthDate, to: date).year ?? 0)
+    }
+
+    /// Matches the quote bank's coverage so the subheading never promises
+    /// "an author" when the flip side is actually a sporting great, etc.
+    private var quoteSourceNoun: String {
+        switch model.interest {
+        case .books: "an author"
+        case .popCulture: "an icon"
+        case .sports: "a sporting great"
+        case .movies: "a filmmaker"
+        case .tv: "a television storyteller"
+        case .music: "a musician"
+        case .tech: "a builder"
+        }
     }
 }
 
@@ -63,6 +77,15 @@ struct MilestoneRowView: View {
         .contentShape(Rectangle())
         .onTapGesture { flip() }
         .accessibilityHint("Tap to flip for a book quote from an author your age")
+        // Interest changed in Settings — clear the stale pool and flip
+        // back rather than leaving a mismatched quote on screen.
+        .onChange(of: model.interest) {
+            quoteOrder = []
+            quoteIndex = 0
+            withAnimation(.spring(duration: 0.5)) {
+                isFlipped = false
+            }
+        }
     }
 
     private func flip() {

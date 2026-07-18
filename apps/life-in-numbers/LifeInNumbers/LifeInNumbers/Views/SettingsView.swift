@@ -4,6 +4,11 @@ import LifeMetricsKit
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.dismiss) private var dismiss
+    @State private var cityAutocomplete = CityAutocomplete()
+    @State private var placeOfBirthText = ""
+    /// Tracks the last tapped suggestion so re-showing it isn't triggered by
+    /// the onChange fired when the field is filled programmatically.
+    @State private var chosenPlaceOfBirth: String?
 
     private static let genderOptions = ["Woman", "Man", "Non-binary", "Prefer not to say"]
 
@@ -12,12 +17,12 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section("Your dates") {
-                    DatePicker(
-                        "Birth date",
-                        selection: $model.profile.birthDate,
-                        in: ...Date.now,
-                        displayedComponents: .date
-                    )
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Birth date")
+                            .font(AppFont.serif(.caption))
+                            .foregroundStyle(Theme.inkSecondary)
+                        BirthDatePicker(date: $model.profile.birthDate)
+                    }
                     Stepper(
                         "Life expectancy: \(model.profile.lifeExpectancyYears) years",
                         value: $model.profile.lifeExpectancyYears,
@@ -45,10 +50,42 @@ struct SettingsView: View {
                         Text("Not set").tag("")
                         ForEach(Self.genderOptions, id: \.self) { Text($0).tag($0) }
                     }
-                    TextField("Place of birth", text: Binding(
-                        get: { model.profile.placeOfBirth ?? "" },
-                        set: { model.profile.placeOfBirth = $0.isEmpty ? nil : $0 }
-                    ), prompt: Text("City, Country"))
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Place of birth")
+                            .font(AppFont.serif(.caption))
+                            .foregroundStyle(Theme.inkSecondary)
+                        TextField("City or town", text: $placeOfBirthText, prompt: Text("City or town"))
+                            .multilineTextAlignment(.leading)
+                            .onChange(of: placeOfBirthText) { _, newValue in
+                                model.profile.placeOfBirth = newValue.isEmpty ? nil : newValue
+                                if newValue == chosenPlaceOfBirth {
+                                    cityAutocomplete.clear()
+                                } else {
+                                    chosenPlaceOfBirth = nil
+                                    cityAutocomplete.update(query: newValue)
+                                }
+                            }
+                        ForEach(cityAutocomplete.suggestions.prefix(5), id: \.self) { suggestion in
+                            Button {
+                                placeOfBirthText = suggestion
+                                model.profile.placeOfBirth = suggestion
+                                chosenPlaceOfBirth = suggestion
+                                cityAutocomplete.clear()
+                            } label: {
+                                Text(suggestion)
+                                    .font(AppFont.serif(.callout))
+                                    .foregroundStyle(Theme.dustyBlue)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .onAppear {
+                        // Treat the stored place as already chosen so opening
+                        // Settings doesn't pop the suggestion list.
+                        chosenPlaceOfBirth = model.profile.placeOfBirth
+                        placeOfBirthText = model.profile.placeOfBirth ?? ""
+                    }
                     Text("Used only to make your written reflections feel like yours. Stays on this device.")
                         .font(AppFont.serif(.caption))
                         .foregroundStyle(.secondary)

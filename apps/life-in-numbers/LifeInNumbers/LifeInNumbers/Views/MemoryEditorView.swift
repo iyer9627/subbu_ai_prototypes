@@ -319,6 +319,11 @@ struct MemoryEditorView: View {
         Button {
             let resolvedTitle = title.trimmingCharacters(in: .whitespaces)
 
+            // Saving mid-recording shouldn't silently lose the take.
+            if voice.isRecording {
+                voice.finishRecordingNow()
+            }
+
             // Commit staged media, replacing (and cleaning up) what it displaces.
             var photoFilename = selection.event?.photoFilename
             if photoChanged {

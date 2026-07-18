@@ -58,7 +58,20 @@ final class VoiceNoteSession: NSObject {
     }
 
     func stopRecording() {
-        recorder?.stop()
+        finishRecordingNow()
+    }
+
+    /// Stops the in-flight recording (if any) and immediately stages its
+    /// file, so a "save now" action never races the delegate callback.
+    @discardableResult
+    func finishRecordingNow() -> URL? {
+        guard let recorder else { return nil }
+        let url = recorder.url
+        recorder.stop()
+        self.recorder = nil
+        isRecording = false
+        stagedRecordingURL = url
+        return url
     }
 
     /// Plays either the staged recording or an already-saved voice note.
@@ -96,8 +109,11 @@ final class VoiceNoteSession: NSObject {
     }
 
     private func finishedRecording(successfully success: Bool) {
-        let url = recorder?.url
-        recorder = nil
+        // If finishRecordingNow() already cleared the recorder (e.g. the
+        // user tapped save mid-recording), don't stomp on the staged URL.
+        guard let recorder else { return }
+        let url = recorder.url
+        self.recorder = nil
         isRecording = false
         stagedRecordingURL = success ? url : nil
     }

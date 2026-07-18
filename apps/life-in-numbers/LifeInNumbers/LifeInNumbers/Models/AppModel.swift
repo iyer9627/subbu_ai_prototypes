@@ -34,10 +34,12 @@ final class AppModel {
     var lastReflectionDate: Date? {
         didSet { defaults.set(lastReflectionDate?.timeIntervalSinceReferenceDate, forKey: Keys.lastReflectionDate) }
     }
-    /// The life-in-months diary, kept sorted by month.
+    /// The life-in-months diary, kept sorted by month. Mutation points sort
+    /// before assigning — never mutate this inside its own observer:
+    /// @Observable makes properties computed, so self-mutation in didSet
+    /// recurses infinitely (stack overflow).
     var events: [LifeEvent] {
         didSet {
-            events.sort { $0.monthIndex < $1.monthIndex }
             if let data = try? JSONEncoder().encode(events) {
                 defaults.set(data, forKey: Keys.events)
             }
@@ -86,11 +88,13 @@ final class AppModel {
     }
 
     func upsert(_ event: LifeEvent) {
-        if let i = events.firstIndex(where: { $0.id == event.id }) {
-            events[i] = event
+        var updated = events
+        if let i = updated.firstIndex(where: { $0.id == event.id }) {
+            updated[i] = event
         } else {
-            events.append(event)
+            updated.append(event)
         }
+        events = updated.sorted { $0.monthIndex < $1.monthIndex }
     }
 
     func deleteEvent(id: UUID) {

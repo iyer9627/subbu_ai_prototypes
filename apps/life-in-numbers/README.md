@@ -74,6 +74,15 @@ No signing requirements beyond automatic signing. The Reflection model can be
 swapped in Settings for any MLX-format chat model on the Hugging Face hub
 (e.g. a larger Qwen, Llama, or Gemma variant).
 
+## Artwork
+
+The app's visuals are Midjourney-generated watercolors in the style of a
+hand-painted Parisian sketch, wired into each tab:
+
+| Onboarding | Life in Weeks | Milestones | Reflection | Icon |
+|---|---|---|---|---|
+| <img src="docs/art/hourglass-puppy.png" width="140"> | <img src="docs/art/book-grid-dog-crop.png" width="160"> | <img src="docs/art/milestone-cake-crop.png" width="160"> | <img src="docs/art/rooftop-boxer-crop.png" width="120"> | <img src="LifeInNumbers/LifeInNumbers/Assets.xcassets/AppIcon.appiconset/AppIcon-mac-256.png" width="90"> |
+
 ## Estimation rates
 
 | Metric | Rate |

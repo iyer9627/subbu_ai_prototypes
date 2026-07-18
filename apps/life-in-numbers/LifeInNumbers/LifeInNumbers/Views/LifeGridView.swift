@@ -10,6 +10,8 @@ struct LifeGridView: View {
         let grid = WeeksGrid(profile: model.profile, asOf: .now, calculator: model.calculator)
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
+                ArtHeader(imageName: "GridArt",
+                          label: "A watercolor dog lying on a grid of colored squares")
                 summary(for: grid)
                 gridCanvas(for: grid)
                     .padding(16)

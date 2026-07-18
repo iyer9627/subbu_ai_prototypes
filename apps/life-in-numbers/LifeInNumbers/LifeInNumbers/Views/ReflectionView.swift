@@ -97,6 +97,13 @@ struct ReflectionView: View {
                             .foregroundStyle(Theme.inkSecondary)
                     }
                 } else {
+                    Image("RooftopArt")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 260)
+                        .frame(maxWidth: .infinity)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .accessibilityLabel("A watercolor dog in a beret watching moons from a rooftop")
                     Text("Your numbers, read back to you as a few sentences. The first run downloads the model (about 300 MB); after that it works offline.")
                         .font(.subheadline)
                         .foregroundStyle(Theme.inkSecondary)

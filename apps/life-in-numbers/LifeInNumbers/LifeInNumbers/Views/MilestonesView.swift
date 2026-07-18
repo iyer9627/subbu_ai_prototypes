@@ -8,6 +8,8 @@ struct MilestonesView: View {
         let milestones = model.milestoneGenerator.upcomingMilestones(for: model.profile, asOf: .now)
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
+                ArtHeader(imageName: "MilestonesArt",
+                          label: "A watercolor cake with one candle on a hillside path lined with flags")
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Coming up")
                         .font(.title2.weight(.semibold))

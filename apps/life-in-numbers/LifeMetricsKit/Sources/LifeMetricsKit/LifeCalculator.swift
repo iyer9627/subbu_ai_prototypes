@@ -113,7 +113,7 @@ public struct LifeCalculator: Sendable {
                 title: "Weeks Lived",
                 value: Double(weeksLived(for: profile, asOf: date)),
                 unit: "weeks",
-                detail: "Each one a box in your life grid.",
+                detail: "Seven days at a time.",
                 symbolName: "square.grid.3x3"
             ),
             LifeMetric(
@@ -121,7 +121,7 @@ public struct LifeCalculator: Sendable {
                 title: "Months Lived",
                 value: Double(monthsLived(for: profile, asOf: date)),
                 unit: "months",
-                detail: "Calendar pages turned so far.",
+                detail: "Each one a box in your life grid.",
                 symbolName: "calendar"
             ),
             LifeMetric(

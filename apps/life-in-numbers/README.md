@@ -21,9 +21,14 @@ A native **macOS + iPhone** app built from a single SwiftUI codebase.
   closest-magnitude retrieval, and the multiplier is computed, never generated.
   On Apple silicon, the on-device model can optionally rephrase the retrieved
   fact — it is instructed to use only the numbers it is handed.
-- **Life in Weeks** — a Canvas-drawn grid of ~4,160 boxes (52 weeks × expected
-  years): terracotta for weeks lived, dusty blue for the current week, faded for
-  the weeks ahead.
+- **Life in Months** — a Canvas-drawn grid with one box per month, 12 to a row
+  so every row is a year of life: terracotta for months lived, dusty blue for
+  the current month, sage with an icon where a memory lives. **Tap any month to
+  keep a memory there** — the grid is a personal diary. It pre-seeds movable,
+  approximate milestones (born, first steps, started school, first crush,
+  finished school, first job), and the editor needs no typing at all: pick an
+  icon, tap a suggestion like "Started school" or "A big trip", done. A
+  chronological memories list below the grid mirrors everything accessibly.
 - **Milestones** — upcoming round numbers worth celebrating: your 15,000th day,
   week 2,000, 2 billion seconds, the next trip around the Sun, the halfway point.
 - **Settings** — adjust birth date and life expectancy (40–120 years); everything

@@ -14,7 +14,7 @@ struct RootView: View {
 
 enum AppSection: String, CaseIterable, Identifiable {
     case dashboard = "Numbers"
-    case lifeGrid = "Life in Weeks"
+    case lifeGrid = "Life in Months"
     case milestones = "Milestones"
     case reflection = "Reflection"
 

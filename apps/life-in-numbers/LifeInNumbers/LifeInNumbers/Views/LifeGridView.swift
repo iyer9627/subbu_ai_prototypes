@@ -1,49 +1,61 @@
 import SwiftUI
 import LifeMetricsKit
 
-/// "Your life in weeks": one small box per week of the expected lifespan,
-/// 52 to a row, painted like pigment on paper.
+/// "Life in months": one box per month, 12 to a row so every row is a year.
+/// Months holding a memory show its icon — tap any month to add or edit one.
+/// The grid doubles as a simple personal diary.
 struct LifeGridView: View {
     @Environment(AppModel.self) private var model
+    @State private var editing: MonthSelection?
+
+    private var calendar: Calendar { Calendar.current }
 
     var body: some View {
-        let grid = WeeksGrid(profile: model.profile, asOf: .now, calculator: model.calculator)
+        let grid = MonthsGrid(profile: model.profile, asOf: .now, calculator: model.calculator)
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 ArtHeader(imageName: "GridArt",
                           label: "A watercolor dog lying on a grid of colored squares")
                 summary(for: grid)
                 gridCanvas(for: grid)
-                    .padding(16)
+                    .padding(12)
                     .paperCard()
                 legend
+                diaryList
             }
             .padding()
         }
         .background(Theme.paper)
-        .navigationTitle("Life in Weeks")
+        .navigationTitle("Life in Months")
+        .onAppear { model.seedDiaryIfNeeded() }
+        .sheet(item: $editing) { selection in
+            MemoryEditorView(selection: selection, monthsLived: grid.monthsLived)
+        }
     }
 
-    private func summary(for grid: WeeksGrid) -> some View {
+    private func summary(for grid: MonthsGrid) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("\(grid.weeksLived.formatted()) weeks lived")
+            Text("\(grid.monthsLived.formatted()) months lived")
                 .font(.title2.weight(.semibold))
                 .foregroundStyle(Theme.ink)
-            Text("\(grid.weeksRemaining.formatted()) to go in a \(model.profile.lifeExpectancyYears)-year life — each box is one week.")
+            Text("Each box is one month; each row is one year. Tap a month to keep a memory there.")
                 .font(.subheadline)
                 .foregroundStyle(Theme.inkSecondary)
         }
     }
 
-    private func gridCanvas(for grid: WeeksGrid) -> some View {
-        let columns = WeeksGrid.columnsPerRow
+    // MARK: - Grid
+
+    private func gridCanvas(for grid: MonthsGrid) -> some View {
+        let columns = MonthsGrid.columnsPerRow
         let rows = grid.rows
+        let spacing = 2.0
         return Canvas { context, size in
-            let spacing = 1.5
             let cell = (size.width - CGFloat(columns - 1) * spacing) / CGFloat(columns)
-            for week in 0..<grid.totalWeeks {
-                let row = week / columns
-                let column = week % columns
+            let eventMonths = Dictionary(uniqueKeysWithValues: model.events.map { ($0.monthIndex, $0) })
+            for month in 0..<grid.totalMonths {
+                let row = month / columns
+                let column = month % columns
                 let rect = CGRect(
                     x: CGFloat(column) * (cell + spacing),
                     y: CGFloat(row) * (cell + spacing),
@@ -51,23 +63,65 @@ struct LifeGridView: View {
                     height: cell
                 )
                 let path = Path(roundedRect: rect, cornerRadius: cell * 0.25)
-                if grid.isCurrent(week: week) {
+                if eventMonths[month] != nil {
+                    context.fill(path, with: .color(Theme.sage))
+                } else if grid.isCurrent(month: month) {
                     context.fill(path, with: .color(Theme.dustyBlue))
-                } else if grid.isLived(week: week) {
-                    context.fill(path, with: .color(Theme.terracotta.opacity(0.85)))
+                } else if grid.isLived(month: month) {
+                    context.fill(path, with: .color(Theme.terracotta.opacity(0.55)))
                 } else {
                     context.fill(path, with: .color(Theme.faded))
                 }
+                if let event = eventMonths[month], let symbol = context.resolveSymbol(id: event.id) {
+                    let inset = cell * 0.18
+                    context.draw(symbol, in: rect.insetBy(dx: inset, dy: inset))
+                }
+            }
+        } symbols: {
+            ForEach(model.events) { event in
+                Image(systemName: event.symbolName)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundStyle(.white)
+                    .tag(event.id)
             }
         }
-        .aspectRatio(CGFloat(columns) / CGFloat(rows), contentMode: .fit)
-        .accessibilityLabel("Life grid: \(grid.weeksLived) of \(grid.totalWeeks) weeks lived")
+        .aspectRatio(aspectRatio(columns: columns, rows: rows, spacing: spacing), contentMode: .fit)
+        .accessibilityLabel("Life grid: \(grid.monthsLived) of \(grid.totalMonths) months lived, \(model.events.count) memories. Use the memories list below to browse them.")
+        .overlay(
+            GeometryReader { proxy in
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture { location in
+                        handleTap(at: location, in: proxy.size, grid: grid, spacing: spacing)
+                    }
+            }
+        )
     }
 
+    private func aspectRatio(columns: Int, rows: Int, spacing: Double) -> CGFloat {
+        // Approximate: cells are square, so ratio ~ columns / rows.
+        CGFloat(columns) / CGFloat(max(rows, 1))
+    }
+
+    private func handleTap(at location: CGPoint, in size: CGSize, grid: MonthsGrid, spacing: Double) {
+        let columns = MonthsGrid.columnsPerRow
+        let cell = (size.width - CGFloat(columns - 1) * spacing) / CGFloat(columns)
+        let column = min(columns - 1, max(0, Int(location.x / (cell + spacing))))
+        let row = max(0, Int(location.y / (cell + spacing)))
+        let month = row * columns + column
+        // Memories live in the past (or this month).
+        guard month <= grid.monthsLived, month < grid.totalMonths else { return }
+        editing = MonthSelection(monthIndex: month, event: model.event(atMonth: month))
+    }
+
+    // MARK: - Legend & diary
+
     private var legend: some View {
-        HStack(spacing: 20) {
-            legendItem(color: Theme.terracotta.opacity(0.85), label: "Lived")
-            legendItem(color: Theme.dustyBlue, label: "This week")
+        HStack(spacing: 16) {
+            legendItem(color: Theme.terracotta.opacity(0.55), label: "Lived")
+            legendItem(color: Theme.dustyBlue, label: "This month")
+            legendItem(color: Theme.sage, label: "Memory")
             legendItem(color: Theme.faded, label: "Ahead")
         }
         .font(.caption)
@@ -81,6 +135,76 @@ struct LifeGridView: View {
                 .frame(width: 12, height: 12)
             Text(label)
         }
+    }
+
+    private var diaryList: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Memories")
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(Theme.ink)
+            if model.events.isEmpty {
+                Text("Tap any lived month above to keep your first memory.")
+                    .font(.subheadline)
+                    .foregroundStyle(Theme.inkSecondary)
+            }
+            ForEach(model.events) { event in
+                Button {
+                    editing = MonthSelection(monthIndex: event.monthIndex, event: event)
+                } label: {
+                    MemoryRowView(event: event, birthDate: model.profile.birthDate)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+}
+
+/// A tapped month, with its memory if one exists there.
+struct MonthSelection: Identifiable {
+    let monthIndex: Int
+    let event: LifeEvent?
+    var id: Int { monthIndex }
+}
+
+struct MemoryRowView: View {
+    let event: LifeEvent
+    let birthDate: Date
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: event.symbolName)
+                .font(.title3)
+                .foregroundStyle(.white)
+                .frame(width: 38, height: 38)
+                .background(RoundedRectangle(cornerRadius: 10).fill(Theme.sage))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(event.title)
+                    .font(.headline)
+                    .foregroundStyle(Theme.ink)
+                Text(Self.subtitle(for: event, birthDate: birthDate))
+                    .font(.caption)
+                    .foregroundStyle(Theme.inkSecondary)
+                if let note = event.note, !note.isEmpty {
+                    Text(note)
+                        .font(.caption)
+                        .foregroundStyle(Theme.inkSecondary)
+                        .italic()
+                }
+            }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(Theme.faded)
+        }
+        .padding(12)
+        .paperCard()
+    }
+
+    static func subtitle(for event: LifeEvent, birthDate: Date) -> String {
+        let date = MonthsGrid.date(forMonthIndex: event.monthIndex, birthDate: birthDate, calendar: .current)
+        let age = event.monthIndex / 12
+        let formatted = date.formatted(.dateTime.month(.wide).year())
+        return age == 0 ? formatted : "Age \(age) · \(formatted)"
     }
 }
 

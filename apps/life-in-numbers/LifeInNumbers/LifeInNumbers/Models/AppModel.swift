@@ -12,6 +12,8 @@ final class AppModel {
         static let reflectionModelID = "reflection.modelID"
         static let lastReflection = "reflection.lastText"
         static let lastReflectionDate = "reflection.lastDate"
+        static let events = "diary.events"
+        static let eventsSeeded = "diary.seeded"
     }
 
     /// Hugging Face repo of the on-device model (MLX 4-bit weights).
@@ -32,6 +34,15 @@ final class AppModel {
     var lastReflectionDate: Date? {
         didSet { defaults.set(lastReflectionDate?.timeIntervalSinceReferenceDate, forKey: Keys.lastReflectionDate) }
     }
+    /// The life-in-months diary, kept sorted by month.
+    var events: [LifeEvent] {
+        didSet {
+            events.sort { $0.monthIndex < $1.monthIndex }
+            if let data = try? JSONEncoder().encode(events) {
+                defaults.set(data, forKey: Keys.events)
+            }
+        }
+    }
 
     let calculator = LifeCalculator()
     let milestoneGenerator = MilestoneGenerator()
@@ -50,6 +61,40 @@ final class AppModel {
         self.lastReflection = defaults.string(forKey: Keys.lastReflection)
         self.lastReflectionDate = (defaults.object(forKey: Keys.lastReflectionDate) as? Double)
             .map(Date.init(timeIntervalSinceReferenceDate:))
+
+        if let data = defaults.data(forKey: Keys.events),
+           let stored = try? JSONDecoder().decode([LifeEvent].self, from: data) {
+            self.events = stored.sorted { $0.monthIndex < $1.monthIndex }
+        } else {
+            self.events = []
+        }
+    }
+
+    /// Pre-fills the diary with movable, approximate milestones — once.
+    func seedDiaryIfNeeded() {
+        guard !defaults.bool(forKey: Keys.eventsSeeded) else { return }
+        defaults.set(true, forKey: Keys.eventsSeeded)
+        if events.isEmpty {
+            events = LifeEvent.starterEvents(
+                monthsLived: calculator.monthsLived(for: profile, asOf: .now)
+            )
+        }
+    }
+
+    func event(atMonth index: Int) -> LifeEvent? {
+        events.first { $0.monthIndex == index }
+    }
+
+    func upsert(_ event: LifeEvent) {
+        if let i = events.firstIndex(where: { $0.id == event.id }) {
+            events[i] = event
+        } else {
+            events.append(event)
+        }
+    }
+
+    func deleteEvent(id: UUID) {
+        events.removeAll { $0.id == id }
     }
 
     private func persist() {

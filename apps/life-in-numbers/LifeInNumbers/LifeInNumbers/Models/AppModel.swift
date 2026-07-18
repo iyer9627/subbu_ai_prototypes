@@ -16,6 +16,7 @@ final class AppModel {
         static let lastReflectionDate = "reflection.lastDate"
         static let events = "diary.events"
         static let eventsSeeded = "diary.seeded"
+        static let interest = "profile.interest"
     }
 
     /// Hugging Face repo of the on-device model (MLX 4-bit weights).
@@ -29,6 +30,10 @@ final class AppModel {
     }
     var reflectionModelID: String {
         didSet { defaults.set(reflectionModelID, forKey: Keys.reflectionModelID) }
+    }
+    /// The single interest that flavors quotes and number facts.
+    var interest: Interest {
+        didSet { defaults.set(interest.rawValue, forKey: Keys.interest) }
     }
     var lastReflection: String? {
         didSet { defaults.set(lastReflection, forKey: Keys.lastReflection) }
@@ -67,6 +72,7 @@ final class AppModel {
         )
         self.hasOnboarded = defaults.bool(forKey: Keys.hasOnboarded)
         self.reflectionModelID = defaults.string(forKey: Keys.reflectionModelID) ?? Self.defaultReflectionModelID
+        self.interest = defaults.string(forKey: Keys.interest).flatMap(Interest.init(rawValue:)) ?? .books
         self.lastReflection = defaults.string(forKey: Keys.lastReflection)
         self.lastReflectionDate = (defaults.object(forKey: Keys.lastReflectionDate) as? Double)
             .map(Date.init(timeIntervalSinceReferenceDate:))

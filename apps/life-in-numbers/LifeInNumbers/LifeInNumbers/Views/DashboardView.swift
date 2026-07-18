@@ -60,9 +60,13 @@ struct MetricCardView: View {
     @State private var isFlipped = false
     @State private var riff: String?
     @State private var isRiffing = false
+    @State private var factOrder: [NumberFact] = []
+    @State private var factIndex = 0
 
-    private var fact: NumberFact? {
-        metric.kind == .lifeProgress ? nil : FactBank.closest(to: metric.value)
+    private var flippable: Bool { metric.kind != .lifeProgress }
+
+    private var currentFact: NumberFact? {
+        factOrder.isEmpty ? nil : factOrder[factIndex % factOrder.count]
     }
 
     var body: some View {
@@ -70,18 +74,39 @@ struct MetricCardView: View {
             front
                 .opacity(isFlipped ? 0 : 1)
                 .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
-            if let fact {
+            if let fact = currentFact {
                 back(fact: fact)
                     .opacity(isFlipped ? 1 : 0)
                     .rotation3DEffect(.degrees(isFlipped ? 0 : -180), axis: (x: 0, y: 1, z: 0))
             }
         }
         .contentShape(Rectangle())
-        .onTapGesture {
-            guard fact != nil else { return }
-            withAnimation(.spring(duration: 0.5)) { isFlipped.toggle() }
+        .onTapGesture { flip() }
+        .accessibilityHint(flippable ? "Tap to flip for a real-world comparison" : "")
+    }
+
+    private func flip() {
+        guard flippable else { return }
+        if factOrder.isEmpty {
+            // Tailored to the user's interest and home, shuffled so each
+            // card starts somewhere different; cycles without repeating.
+            factOrder = FactBank.pool(
+                for: metric.value,
+                interest: model.interest,
+                place: model.profile.placeOfBirth
+            ).shuffled()
         }
-        .accessibilityHint(fact == nil ? "" : "Tap to flip for a real-world comparison")
+        guard !factOrder.isEmpty else { return }
+        withAnimation(.spring(duration: 0.5)) {
+            if isFlipped {
+                isFlipped = false
+            } else {
+                // A different fact every time the card turns over.
+                factIndex = (factIndex + 1) % factOrder.count
+                riff = nil
+                isFlipped = true
+            }
+        }
     }
 
     private var front: some View {
@@ -94,7 +119,7 @@ struct MetricCardView: View {
                     .font(AppFont.serif(.subheadline, .medium))
                     .foregroundStyle(Theme.inkSecondary)
                 Spacer()
-                if fact != nil {
+                if flippable {
                     Image(systemName: "arrow.2.squarepath")
                         .font(AppFont.serif(.caption))
                         .foregroundStyle(Theme.faded)

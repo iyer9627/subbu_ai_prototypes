@@ -29,6 +29,19 @@ final class QuoteBankTests: XCTestCase {
         XCTAssertEqual(pool.first?.book, "The Hobbit")
     }
 
+    func testPoolFiltersByInterest() {
+        let movies = QuoteBank.pool(forAge: 36, interest: .movies)
+        XCTAssertEqual(movies.first?.interest, .movies)
+        // Lucas released Empire at 36 — it should lead the movies pool.
+        XCTAssertEqual(movies.first?.author, "George Lucas")
+
+        // A thin shelf pads with book classics rather than running short.
+        let sports = QuoteBank.pool(forAge: 30, interest: .sports)
+        XCTAssertEqual(sports.count, 6)
+        XCTAssertTrue(sports.prefix(3).allSatisfy { $0.interest == .sports })
+        XCTAssertTrue(sports.suffix(3).allSatisfy { $0.interest == .books })
+    }
+
     func testKnownAuthorAges() {
         let hobbit = QuoteBank.all.first { $0.book == "The Hobbit" }
         XCTAssertEqual(hobbit?.authorAgeAtPublication, 45)

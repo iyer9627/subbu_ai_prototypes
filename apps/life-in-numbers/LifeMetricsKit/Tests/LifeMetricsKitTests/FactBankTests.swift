@@ -28,6 +28,32 @@ final class FactBankTests: XCTestCase {
     func testClosestRejectsNonPositive() {
         XCTAssertNil(FactBank.closest(to: 0))
         XCTAssertNil(FactBank.closest(to: -5))
+        XCTAssertTrue(FactBank.pool(for: 0).isEmpty)
+    }
+
+    func testPoolPrefersHomeRegion() {
+        // Someone born in Chennai sees Chennai before New York at city scale.
+        let pool = FactBank.pool(for: 11_500_000, place: "Chennai, India")
+        XCTAssertEqual(pool.first?.region, "India")
+        XCTAssertTrue(pool.first?.text.contains("Chennai") ?? false)
+    }
+
+    func testPoolPrefersChosenInterest() {
+        let pool = FactBank.pool(for: 28_000_000, interest: .tech)
+        XCTAssertEqual(pool.first?.interest, .tech, pool.first?.text ?? "")
+    }
+
+    func testPoolWithoutInterestFavorsUniversalFacts() {
+        // Interest-tagged facts shouldn't crowd universal knowledge for
+        // users who picked nothing related.
+        let pool = FactBank.pool(for: 28_000_000, interest: nil)
+        XCTAssertNil(pool.first?.interest)
+    }
+
+    func testPoolHasVarietyForCycling() {
+        let pool = FactBank.pool(for: 1_300_000_000, interest: .sports, place: "India")
+        XCTAssertGreaterThanOrEqual(pool.count, 4, "cards need a pool to cycle through")
+        XCTAssertEqual(Set(pool.map(\.text)).count, pool.count)
     }
 
     func testComparisonPhrasing() {

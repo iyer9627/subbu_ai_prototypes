@@ -25,6 +25,18 @@ struct SettingsView: View {
                     )
                 }
 
+                Section("Your interest") {
+                    Picker("Quotes and facts flavored by", selection: $model.interest) {
+                        ForEach(Interest.allCases) { interest in
+                            Label(interest.rawValue, systemImage: interest.symbolName)
+                                .tag(interest)
+                        }
+                    }
+                    Text("One at a time — it tunes the milestone quotes and the card facts to what you love.")
+                        .font(AppFont.serif(.caption))
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("About you (optional)") {
                     Picker("Gender", selection: Binding(
                         get: { model.profile.gender ?? "" },

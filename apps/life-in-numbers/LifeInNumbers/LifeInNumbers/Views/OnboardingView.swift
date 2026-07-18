@@ -6,6 +6,7 @@ struct OnboardingView: View {
     @State private var birthDate = Calendar.current.date(byAdding: .year, value: -30, to: .now) ?? .now
     @State private var gender = ""
     @State private var placeOfBirth = ""
+    @State private var interest: Interest = .books
 
     var body: some View {
         ZStack {
@@ -61,6 +62,14 @@ struct OnboardingView: View {
                             .textFieldStyle(.roundedBorder)
                     }
                     .frame(maxWidth: 360)
+
+                    Picker("What do you love?", selection: $interest) {
+                        ForEach(Interest.allCases) { option in
+                            Label(option.rawValue, systemImage: option.symbolName)
+                                .tag(option)
+                        }
+                    }
+                    .frame(maxWidth: 360)
                 }
                 .padding(24)
                 .paperCard()
@@ -70,6 +79,7 @@ struct OnboardingView: View {
                     model.profile.birthDate = birthDate
                     model.profile.gender = gender.isEmpty ? nil : gender
                     model.profile.placeOfBirth = placeOfBirth.isEmpty ? nil : placeOfBirth
+                    model.interest = interest
                     model.hasOnboarded = true
                 } label: {
                     Text("Count My Life")

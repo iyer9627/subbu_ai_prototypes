@@ -69,7 +69,7 @@ struct MilestoneRowView: View {
 
     private func flip() {
         if quoteOrder.isEmpty {
-            quoteOrder = QuoteBank.pool(forAge: ageAtMilestone).shuffled()
+            quoteOrder = QuoteBank.pool(forAge: ageAtMilestone, interest: model.interest).shuffled()
         }
         withAnimation(.spring(duration: 0.5)) {
             if isFlipped {

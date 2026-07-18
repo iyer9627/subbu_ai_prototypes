@@ -104,22 +104,20 @@ struct MemoryEditorView: View {
     }
 
     private var iconPicker: some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 6), spacing: 10) {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 4), spacing: 10) {
             ForEach(Self.icons, id: \.self) { icon in
                 Button {
                     symbolName = icon
                 } label: {
-                    Image(systemName: icon)
-                        .font(.title3)
-                        .foregroundStyle(symbolName == icon ? .white : Theme.ink)
-                        .frame(maxWidth: .infinity, minHeight: 44)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(symbolName == icon ? Theme.sage : Theme.card)
-                        )
+                    MemoryIconView(symbolName: icon)
+                        .frame(height: 76)
+                        .frame(maxWidth: .infinity)
+                        .background(RoundedRectangle(cornerRadius: 12).fill(Theme.sage.opacity(0.4)))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .strokeBorder(symbolName == icon ? Theme.sage : Theme.faded, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 12)
+                                .strokeBorder(symbolName == icon ? Theme.dustyBlue : Theme.faded,
+                                              lineWidth: symbolName == icon ? 3 : 1)
                         )
                 }
                 .buttonStyle(.plain)

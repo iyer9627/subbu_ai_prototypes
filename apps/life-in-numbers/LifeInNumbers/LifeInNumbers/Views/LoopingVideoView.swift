@@ -25,11 +25,14 @@ struct LoopingVideoView {
 extension LoopingVideoView: NSViewRepresentable {
     func makeNSView(context: Context) -> NSView {
         let view = NSView()
-        view.wantsLayer = true
         if let player = Self.makePlayer(resourceName: resourceName) {
             let layer = AVPlayerLayer(player: player)
             layer.videoGravity = .resizeAspectFill
+            // Order matters on AppKit: install the custom layer first, then
+            // opt into layer backing, or the default backing layer wins and
+            // the video never appears.
             view.layer = layer
+            view.wantsLayer = true
             player.play()
         }
         return view

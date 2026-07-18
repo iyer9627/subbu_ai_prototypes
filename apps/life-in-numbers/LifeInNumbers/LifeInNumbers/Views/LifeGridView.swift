@@ -54,7 +54,7 @@ struct LifeGridView: View {
         return TimelineView(.animation(minimumInterval: 1.0 / 12)) { timeline in
         Canvas { context, size in
             let cell = (size.width - CGFloat(columns - 1) * spacing) / CGFloat(columns)
-            let pulse = 0.55 + 0.45 * (0.5 + 0.5 * sin(timeline.date.timeIntervalSinceReferenceDate * 2))
+            let pulse = 0.30 + 0.70 * (0.5 + 0.5 * sin(timeline.date.timeIntervalSinceReferenceDate * 2.4))
             // Two memories can share a month (e.g. one moved onto another),
             // so never build this with uniqueKeysWithValues — it traps.
             let eventMonths = Dictionary(model.events.map { ($0.monthIndex, $0) },
@@ -179,11 +179,10 @@ struct MemoryRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: event.symbolName)
-                .font(.title3)
-                .foregroundStyle(.white)
-                .frame(width: 38, height: 38)
+            MemoryIconView(symbolName: event.symbolName)
+                .frame(width: 44, height: 44)
                 .background(RoundedRectangle(cornerRadius: 10).fill(Theme.sage))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             VStack(alignment: .leading, spacing: 2) {
                 Text(event.title)
                     .font(AppFont.serif(.headline, .semibold))

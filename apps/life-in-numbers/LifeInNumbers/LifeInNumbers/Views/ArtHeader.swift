@@ -12,7 +12,8 @@ struct ArtHeader: View {
         Image(imageName)
             .resizable()
             .scaledToFill()
-            .scaleEffect(drifting ? 1.07 : 1.0, anchor: .center)
+            .scaleEffect(drifting ? 1.12 : 1.0, anchor: .center)
+            .offset(x: drifting ? -8 : 8)
             .frame(maxWidth: .infinity)
             .frame(height: 180)
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
@@ -22,7 +23,7 @@ struct ArtHeader: View {
             )
             .accessibilityLabel(label)
             .onAppear {
-                withAnimation(.easeInOut(duration: 14).repeatForever(autoreverses: true)) {
+                withAnimation(.easeInOut(duration: 9).repeatForever(autoreverses: true)) {
                     drifting = true
                 }
             }

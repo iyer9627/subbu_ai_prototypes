@@ -12,6 +12,20 @@ struct DashboardView: View {
             TimelineView(.periodic(from: .now, by: 1)) { context in
                 let metrics = model.calculator.allMetrics(for: model.profile, asOf: context.date)
                 VStack(alignment: .leading, spacing: 20) {
+                    // The living watercolor hero, front and center on the
+                    // first tab — sand falls, stars drift.
+                    Image("OnboardingHero")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 150)
+                        .overlay(LoopingVideoView(resourceName: "hero"))
+                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                .strokeBorder(Theme.faded, lineWidth: 1)
+                        )
+                        .accessibilityHidden(true)
                     header(asOf: context.date)
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(Array(metrics.enumerated()), id: \.element.id) { index, metric in

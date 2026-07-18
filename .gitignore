@@ -28,6 +28,13 @@ __pycache__/
 .classpath
 .settings/
 
+# Xcode / Swift
+xcuserdata/
+DerivedData/
+.build/
+.swiftpm/
+*.xcuserstate
+
 # OS
 .DS_Store
 Thumbs.db

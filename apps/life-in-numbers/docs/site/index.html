@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Life in Numbers</title>
+<meta name="description" content="Your whole story, counted. A watercolor macOS + iPhone app with an on-device open-source LLM.">
+<style>
+  :root {
+    --paper: #f7f2e6;
+    --card: #fffdf6;
+    --ink: #3b362e;
+    --ink-2: #6f695d;
+    --blue: #7389a3;
+    --sage: #8c9970;
+    --rose: #b07870;
+    --line: #d9d3c4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #262420;
+      --card: #2f2c27;
+      --ink: #eae6db;
+      --ink-2: #aaa494;
+      --blue: #8ea3bc;
+      --sage: #a3b088;
+      --rose: #c48f87;
+      --line: #4a4740;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #262420; --card: #2f2c27; --ink: #eae6db; --ink-2: #aaa494;
+    --blue: #8ea3bc; --sage: #a3b088; --rose: #c48f87; --line: #4a4740;
+  }
+  :root[data-theme="light"] {
+    --paper: #f7f2e6; --card: #fffdf6; --ink: #3b362e; --ink-2: #6f695d;
+    --blue: #7389a3; --sage: #8c9970; --rose: #b07870; --line: #d9d3c4;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "EB Garamond", Garamond, "Apple Garamond", "Adobe Garamond Pro", Georgia, serif;
+    font-size: 20px;
+    line-height: 1.55;
+  }
+  main { max-width: 880px; margin: 0 auto; padding: 48px 20px 80px; }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.7rem;
+    color: var(--ink-2);
+  }
+
+  /* Hero */
+  header { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+  .hero-frame {
+    width: min(340px, 78vw);
+    background: var(--card);
+    padding: 14px 14px 20px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.12);
+    transform: rotate(-1.2deg);
+  }
+  .hero-frame img { width: 100%; display: block; }
+  h1 {
+    font-size: clamp(2.6rem, 7vw, 4.2rem);
+    font-weight: 500;
+    margin: 8px 0 0;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+  }
+  .tagline { font-size: 1.25rem; font-style: italic; color: var(--ink-2); margin: 0; max-width: 34ch; }
+
+  /* Live ticker */
+  .ticker {
+    margin-top: 10px;
+    font-size: 1.05rem;
+    color: var(--ink-2);
+  }
+  .ticker strong { color: var(--rose); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* Sections */
+  section { margin-top: 72px; }
+  h2 {
+    font-size: 1.9rem; font-weight: 500; margin: 6px 0 24px; text-wrap: balance;
+  }
+
+  .scraps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 26px; }
+  .scrap {
+    background: var(--card);
+    padding: 0 0 18px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+  }
+  .scrap img { width: 100%; height: 170px; object-fit: cover; display: block; }
+  .scrap h3 { font-size: 1.25rem; margin: 14px 18px 6px; font-weight: 600; }
+  .scrap h3 span { display: block; font-size: 0.68rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px; }
+  .scrap p { margin: 0 18px; font-size: 0.98rem; color: var(--ink-2); }
+  .scrap:nth-child(1) { transform: rotate(-0.8deg); } .scrap:nth-child(1) h3 span { color: var(--blue); }
+  .scrap:nth-child(2) { transform: rotate(0.7deg); }  .scrap:nth-child(2) h3 span { color: var(--sage); }
+  .scrap:nth-child(3) { transform: rotate(-0.5deg); } .scrap:nth-child(3) h3 span { color: var(--rose); }
+  .scrap:nth-child(4) { transform: rotate(0.9deg); }  .scrap:nth-child(4) h3 span { color: var(--blue); }
+
+  /* Quote strip */
+  .quote { text-align: center; max-width: 44ch; margin: 0 auto; }
+  .quote blockquote { font-size: 1.5rem; font-style: italic; margin: 0; text-wrap: balance; }
+  .quote cite { display: block; font-style: normal; font-size: 0.9rem; color: var(--ink-2); margin-top: 12px; }
+  .quote cite b { color: var(--sage); font-weight: 600; }
+
+  /* On-device strip */
+  .device { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 28px 8px; text-align: center; }
+  .device p { max-width: 58ch; margin: 8px auto 0; color: var(--ink-2); font-size: 1.02rem; }
+  .stack { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: center; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); }
+
+  footer { margin-top: 72px; text-align: center; font-size: 0.95rem; color: var(--ink-2); }
+  footer a { color: var(--blue); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-frame, .scrap { transform: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="hero-frame" id="hero-scrap">
+      <img src="../hero.gif" alt="A watercolor dog in a blue beret watching sand fall through an hourglass, gently animated" width="340" height="425">
+    </div>
+    <div>
+      <p class="eyebrow">A macOS &amp; iPhone app</p>
+      <h1>Life in Numbers</h1>
+    </div>
+    <p class="tagline">Your whole story, counted — heartbeats, breaths, and trips around the Sun, from one date.</p>
+    <p class="ticker">Since you opened this page: <strong id="beats">0</strong> heartbeats,
+      <strong id="kms">0</strong>&nbsp;km carried around the Sun.</p>
+  </header>
+
+  <section>
+    <p class="eyebrow">Four rooms, one story</p>
+    <h2>The app</h2>
+    <div class="scraps">
+      <article class="scrap">
+        <img src="heart-crop.png" alt="Watercolor painting of a large heart surrounded by a crowd of people">
+        <h3><span>Numbers</span>Thirteen counters, ticking live</h3>
+        <p>Days, heartbeats, full moons, kilometers through space. Flip any card and your number stands next to a real one — sourced from NASA, the UN, the World Bank — tuned to what you love and where you're from.</p>
+      </article>
+      <article class="scrap">
+        <img src="book-grid-dog-crop.png" alt="Watercolor painting of a shaggy dog lying on a grid of colored squares">
+        <h3><span>Life in Months</span>A diary you can hold</h3>
+        <p>One box per month, one row per year. Tap a month, pick a painted icon, keep a memory — no typing needed. First steps, first crush, first job: your life becomes a landscape.</p>
+      </article>
+      <article class="scrap">
+        <img src="milestone-cake-crop.png" alt="Watercolor painting of a small cake with one candle on a hillside path lined with flags">
+        <h3><span>Milestones</span>Round numbers worth a candle</h3>
+        <p>Day 15,000. Two billion seconds. Flip a milestone for a line from a beloved book by an author who was exactly your age when they wrote it.</p>
+      </article>
+      <article class="scrap">
+        <img src="rooftop-boxer-crop.png" alt="Watercolor painting of a dog in a red beret watching moons from a Paris rooftop">
+        <h3><span>Reflection</span>A word from the machine</h3>
+        <p>An open-source model — Qwen, running entirely on your device — reads your numbers back to you as a few warm sentences. No server. No account. Nothing leaves your hands.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="quote">
+    <blockquote>&ldquo;There is nothing like looking, if you want to find something.&rdquo;</blockquote>
+    <cite>— J.&thinsp;R.&thinsp;R. Tolkien, The Hobbit (1937), <b>written at 45</b> — the kind of company the app keeps</cite>
+  </section>
+
+  <section class="device">
+    <p class="eyebrow">Private by architecture</p>
+    <p>Your birth date, your diary, and every reflection live only on your device. The one thing the app ever downloads is the open model itself — once — and then it works on a plane, in a tunnel, or fifty years from now.</p>
+    <div class="stack">
+      <span>SwiftUI</span><span>MLX</span><span>Qwen 2.5</span><span>EB Garamond</span><span>Tested Swift package</span>
+    </div>
+  </section>
+
+  <footer>
+    <p>A prototype from the <a href="https://github.com/iyer9627/subbu_ai_prototypes">subbu_ai_prototypes</a> playground.<br>
+    Watercolors generated with Midjourney in the style of a Parisian sketchbook.</p>
+  </footer>
+</main>
+
+<script>
+  // Torn-paper edges: a unique deckle per scrap, like the app's seeded cards.
+  function deckle(el, wobble) {
+    const pts = [];
+    const step = 6; // percent
+    for (let x = 0; x <= 100; x += step) pts.push(x + "% " + (Math.random() * wobble) + "%");
+    for (let y = 0; y <= 100; y += step) pts.push((100 - Math.random() * wobble) + "% " + y + "%");
+    for (let x = 100; x >= 0; x -= step) pts.push(x + "% " + (100 - Math.random() * wobble) + "%");
+    for (let y = 100; y >= 0; y -= step) pts.push((Math.random() * wobble) + "% " + y + "%");
+    el.style.clipPath = "polygon(" + pts.join(",") + ")";
+  }
+  document.querySelectorAll(".scrap").forEach(el => deckle(el, 1.6));
+  deckle(document.getElementById("hero-scrap"), 1.8);
+
+  // The page counts, like the app: average heart (70 bpm) and Earth's
+  // orbital speed (~29.8 km/s) since the page opened.
+  const beats = document.getElementById("beats");
+  const kms = document.getElementById("kms");
+  const t0 = Date.now();
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function tick() {
+    const s = (Date.now() - t0) / 1000;
+    beats.textContent = Math.floor(s * 70 / 60).toLocaleString();
+    kms.textContent = Math.floor(s * 29.8).toLocaleString();
+  }
+  if (reduced) { tick(); } else { tick(); setInterval(tick, 250); }
+</script>
+</body>
+</html>

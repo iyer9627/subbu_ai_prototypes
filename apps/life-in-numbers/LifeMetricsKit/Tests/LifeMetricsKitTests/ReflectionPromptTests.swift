@@ -37,6 +37,18 @@ final class ReflectionPromptTests: XCTestCase {
         XCTAssertTrue(ReflectionPrompt.system.contains("120 words"))
     }
 
+    func testFactRiffPromptCarriesGroundingRules() {
+        let prompt = ReflectionPrompt.factRiff(
+            metricTitle: "Heartbeats",
+            metricValue: "1.3 billion beats",
+            comparison: "about 1/2 of the 3 billion heartbeats in an average human lifetime"
+        )
+        XCTAssertTrue(prompt.contains("Heartbeats"))
+        XCTAssertTrue(prompt.contains("1.3 billion beats"))
+        XCTAssertTrue(prompt.contains("3 billion heartbeats"))
+        XCTAssertTrue(prompt.contains("do not add, change, or invent"))
+    }
+
     func testStripThinkingRemovesReasoningBlocks() {
         XCTAssertEqual(
             ReflectionPrompt.stripThinking(from: "<think>counting…</think>\nYou have lived well."),

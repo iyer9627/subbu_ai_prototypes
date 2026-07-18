@@ -15,6 +15,12 @@ A native **macOS + iPhone** app built from a single SwiftUI codebase.
 - **Numbers dashboard** — 13 live-updating statistics (days, weeks, hours, seconds,
   heartbeats, breaths, sleep, blinks, full moons, distance through space, trips
   around the Sun, life progress), ticking once per second via `TimelineView`.
+  **Tap any card to flip it** and see your number against a real-world quantity
+  ("about 4× the 384,400 km from Earth to the Moon") — comparisons come from a
+  curated, sourced fact bank (NASA, World Bank, UN, US Census…) with
+  closest-magnitude retrieval, and the multiplier is computed, never generated.
+  On Apple silicon, the on-device model can optionally rephrase the retrieved
+  fact — it is instructed to use only the numbers it is handed.
 - **Life in Weeks** — a Canvas-drawn grid of ~4,160 boxes (52 weeks × expected
   years): terracotta for weeks lived, dusty blue for the current week, faded for
   the weeks ahead.

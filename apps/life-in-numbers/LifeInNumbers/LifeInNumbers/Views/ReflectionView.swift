@@ -5,7 +5,7 @@ import LifeMetricsKit
 /// entirely on-device by an open-source model.
 struct ReflectionView: View {
     @Environment(AppModel.self) private var model
-    @State private var engine = ReflectionEngine()
+    private var engine: ReflectionEngine { .shared }
 
     var body: some View {
         ScrollView {

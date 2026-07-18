@@ -10,6 +10,10 @@ import MLXLMCommon
 @Observable
 @MainActor
 final class ReflectionEngine {
+    /// One engine for the whole app so the model loads (and downloads) once,
+    /// shared by the Reflection tab and the stat-card riffs.
+    static let shared = ReflectionEngine()
+
     enum Phase: Equatable {
         case idle
         case loadingModel(progress: Double?)

@@ -41,6 +41,21 @@ public enum ReflectionPrompt {
         return lines.joined(separator: "\n")
     }
 
+    /// Prompt for a one-sentence riff on a stat-card fact. The comparison is
+    /// pre-computed from the curated fact bank, and the model is forbidden
+    /// from introducing numbers of its own — grounding over creativity.
+    public static func factRiff(metricTitle: String, metricValue: String, comparison: String) -> String {
+        """
+        You are given one verified comparison about a person's life statistic. \
+        Write exactly ONE short, warm, playful sentence that presents it. \
+        Use only the numbers that appear below — do not add, change, or invent \
+        any number or fact. No headings, no lists, plain prose.
+
+        Statistic: \(metricTitle) — \(metricValue)
+        Verified comparison: that is \(comparison).
+        """
+    }
+
     /// Some open models (e.g. Qwen3) emit `<think>…</think>` reasoning blocks
     /// before the answer; keep only the answer.
     public static func stripThinking(from text: String) -> String {

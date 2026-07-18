@@ -103,6 +103,7 @@ struct LifeGridView: View {
                     }
             }
         )
+        }
     }
 
     private func aspectRatio(columns: Int, rows: Int, spacing: Double) -> CGFloat {

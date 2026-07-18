@@ -19,23 +19,24 @@ A native **macOS + iPhone** app built from a single SwiftUI codebase.
   ("about 4× the 384,400 km from Earth to the Moon") — comparisons come from a
   curated, sourced fact bank (NASA, World Bank, UN, US Census…) with
   closest-magnitude retrieval, and the multiplier is computed, never generated.
-  On Apple silicon, the on-device model can optionally rephrase the retrieved
-  fact — it is instructed to use only the numbers it is handed.
 - **Life in Months** — a Canvas-drawn grid with one box per month, 12 to a row
   so every row is a year of life: terracotta for months lived, dusty blue for
-  the current month, sage with an icon where a memory lives. **Tap any month to
-  keep a memory there** — the grid is a personal diary. It pre-seeds movable,
-  approximate milestones (born, first steps, started school, first crush,
-  finished school, first job), and the editor needs no typing at all: pick an
-  icon, tap a suggestion like "Started school" or "A big trip", done. A
-  chronological memories list below the grid mirrors everything accessibly.
+  the current month, and the memory's own watercolor painting where a memory
+  lives. The journal opens to today: the grid autoscrolls to the current,
+  breathing month. **Tap any month to keep a memory there** — the grid is a
+  personal diary. It pre-seeds movable, approximate milestones (born, first
+  steps, started school, first crush, finished school, first job), and the
+  editor needs no typing at all: pick an icon, tap a suggestion like "Started
+  school" or "A big trip", done. Each memory can also carry **a photo from
+  your library and a 30-second voice note** — media is stored as files on
+  device and never leaves it. A chronological memories list below the grid
+  mirrors everything accessibly.
 - **Milestones** — upcoming round numbers worth celebrating: your 15,000th day,
   week 2,000, 2 billion seconds, the next trip around the Sun, the halfway point.
 - **Milestone flips** — flip an upcoming milestone for a verbatim line from a
   beloved book whose author was your age when it was published (Tolkien was 45
   when The Hobbit came out…). Twenty curated, attributed quotes; a fresh one on
-  every flip; the on-device model can add a connecting thought, grounded in the
-  quote it is handed.
+  every flip.
 - **Personal** — optional gender and place of birth shape the written
   reflections; a curated model picker shows only models this device's memory
   can run (0.5B → 7B).
@@ -45,11 +46,20 @@ A native **macOS + iPhone** app built from a single SwiftUI codebase.
   menu bar with live numbers.
 - **Settings** — adjust birth date and life expectancy (40–120 years); everything
   recomputes instantly.
-- **Reflection** — a short essay about *your* numbers, written by an open-source
-  LLM (Qwen 2.5, 4-bit) running **fully on-device** via
-  [MLX](https://github.com/ml-explore/mlx). The weights (~300 MB) download once
-  from the Hugging Face hub on first use and are cached; after that it works
-  offline. No server, no API key — your birth date never leaves the device.
+- **Reflection** — a short, uplifting note about *your* numbers, written by an
+  open-source LLM running **fully on-device** via
+  [MLX](https://github.com/ml-explore/mlx). The default is the best writer your
+  device's memory can run (Llama 3.2 / Qwen 2.5, 4-bit); weights download once
+  from the Hugging Face hub and are cached, so it works offline afterwards. The
+  model's draft is polished (looping repetition stripped, trimmed on sentence
+  boundaries) and quality-gated — if it still isn't worth your time, a
+  hand-written reflection assembled from your real numbers is shown instead,
+  and labeled as such. No server, no API key — your birth date never leaves
+  the device.
+- **Reminisce** — also on the Reflection tab: brings one kept memory back as a
+  scrapbook page — the watercolor icon, your words, and any photos rendered as
+  pasted-in polaroids, with a couple more pictures from your album when they
+  exist.
 
 ## Design
 
@@ -68,15 +78,17 @@ life-in-numbers/
 │   │   ├── WeeksGrid        # Life-in-weeks grid math
 │   │   ├── MilestoneGenerator # Upcoming round-number milestones
 │   │   ├── MetricFormatter  # "2.1 billion"-style compact formatting
-│   │   └── ReflectionPrompt # LLM prompt built from the metrics (pure, tested)
+│   │   └── ReflectionPrompt # LLM prompt + draft polish/quality gate/fallback
 │   └── Tests/               # XCTest suite for every calculation
 └── LifeInNumbers/           # SwiftUI multiplatform app (the face)
     ├── LifeInNumbers.xcodeproj  # Single target: iOS 17+ & macOS 14+
     └── LifeInNumbers/
         ├── Models/          # Observable app state, UserDefaults persistence
-        ├── Services/        # ReflectionEngine: on-device LLM via MLX
+        ├── Services/        # ReflectionEngine (on-device LLM via MLX),
+        │                    #   MemoryMediaStore (photos & voice-note files),
+        │                    #   VoiceNoteSession (30s recorder/player)
         ├── Views/           # Onboarding, Dashboard, LifeGrid, Milestones,
-        │                    #   Reflection, Settings
+        │                    #   Reflection, Reminisce, Settings
         └── Theme/           # Watercolor palette + paper-card styling
 ```
 

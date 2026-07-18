@@ -14,13 +14,15 @@ final class AppModel {
         static let reflectionModelID = "reflection.modelID"
         static let lastReflection = "reflection.lastText"
         static let lastReflectionDate = "reflection.lastDate"
+        static let lastReflectionIsFallback = "reflection.lastIsFallback"
         static let events = "diary.events"
         static let eventsSeeded = "diary.seeded"
         static let interest = "profile.interest"
     }
 
-    /// Hugging Face repo of the on-device model (MLX 4-bit weights).
-    static let defaultReflectionModelID = "mlx-community/Qwen2.5-0.5B-Instruct-4bit"
+    /// Hugging Face repo of the on-device model (MLX 4-bit weights): the
+    /// best writer this device can run, unless the user picked one.
+    static var defaultReflectionModelID: String { ModelCatalog.recommended.id }
 
     var profile: LifeProfile {
         didSet { persist() }
@@ -40,6 +42,11 @@ final class AppModel {
     }
     var lastReflectionDate: Date? {
         didSet { defaults.set(lastReflectionDate?.timeIntervalSinceReferenceDate, forKey: Keys.lastReflectionDate) }
+    }
+    /// True when the shown reflection is the app's hand-written fallback
+    /// rather than the model's draft — so the UI never misattributes it.
+    var lastReflectionIsFallback: Bool {
+        didSet { defaults.set(lastReflectionIsFallback, forKey: Keys.lastReflectionIsFallback) }
     }
     /// The life-in-months diary, kept sorted by month. Mutation points sort
     /// before assigning — never mutate this inside its own observer:
@@ -76,6 +83,7 @@ final class AppModel {
         self.lastReflection = defaults.string(forKey: Keys.lastReflection)
         self.lastReflectionDate = (defaults.object(forKey: Keys.lastReflectionDate) as? Double)
             .map(Date.init(timeIntervalSinceReferenceDate:))
+        self.lastReflectionIsFallback = defaults.bool(forKey: Keys.lastReflectionIsFallback)
 
         if let data = defaults.data(forKey: Keys.events),
            let stored = try? JSONDecoder().decode([LifeEvent].self, from: data) {
@@ -111,6 +119,10 @@ final class AppModel {
     }
 
     func deleteEvent(id: UUID) {
+        if let event = events.first(where: { $0.id == id }) {
+            MemoryMediaStore.delete(event.photoFilename)
+            MemoryMediaStore.delete(event.audioFilename)
+        }
         events.removeAll { $0.id == id }
     }
 

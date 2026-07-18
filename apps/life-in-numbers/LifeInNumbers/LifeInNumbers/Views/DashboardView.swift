@@ -58,10 +58,11 @@ struct MetricCardView: View {
 
     @Environment(AppModel.self) private var model
     @State private var isFlipped = false
-    @State private var riff: String?
-    @State private var isRiffing = false
     @State private var factOrder: [NumberFact] = []
     @State private var factIndex = 0
+
+    /// Both faces share one height so flipping never makes the grid ragged.
+    private static let faceHeight: CGFloat = 128
 
     private var flippable: Bool { metric.kind != .lifeProgress }
 
@@ -103,7 +104,6 @@ struct MetricCardView: View {
             } else {
                 // A different fact every time the card turns over.
                 factIndex = (factIndex + 1) % factOrder.count
-                riff = nil
                 isFlipped = true
             }
         }
@@ -134,9 +134,10 @@ struct MetricCardView: View {
                 .font(AppFont.serif(.caption))
                 .foregroundStyle(Theme.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
         }
         .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, minHeight: Self.faceHeight, alignment: .topLeading)
         .paperCard()
     }
 
@@ -155,54 +156,20 @@ struct MetricCardView: View {
                     .font(AppFont.serif(.caption))
                     .foregroundStyle(Theme.faded)
             }
-            Group {
-                if let riff {
-                    Text(riff)
-                } else {
-                    Text("Your \(formattedValue) \(metric.unit ?? "") — \(comparison).")
-                }
-            }
-            .font(AppFont.serif(.subheadline))
-            .foregroundStyle(Theme.ink)
-            .fixedSize(horizontal: false, vertical: true)
+            Text("Your \(formattedValue) \(metric.unit ?? "") — \(comparison).")
+                .font(AppFont.serif(.subheadline))
+                .foregroundStyle(Theme.ink)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Spacer(minLength: 0)
 
             Text("Source: \(fact.source)")
                 .font(AppFont.serif(.caption2))
                 .foregroundStyle(Theme.inkSecondary)
-
-            if ReflectionEngine.isSupported {
-                Button {
-                    Task { await generateRiff(comparison: comparison) }
-                } label: {
-                    if isRiffing {
-                        ProgressView().controlSize(.small)
-                    } else {
-                        Label(riff == nil ? "Let Qwen say it" : "Again",
-                              systemImage: "sparkles")
-                            .font(AppFont.serif(.caption))
-                    }
-                }
-                .buttonStyle(.bordered)
-                .tint(pigment)
-                .disabled(isRiffing)
-            }
         }
         .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, minHeight: Self.faceHeight, alignment: .topLeading)
         .paperCard()
-    }
-
-    private func generateRiff(comparison: String) async {
-        isRiffing = true
-        defer { isRiffing = false }
-        let prompt = ReflectionPrompt.factRiff(
-            metricTitle: metric.title,
-            metricValue: "\(formattedValue) \(metric.unit ?? "")",
-            comparison: comparison
-        )
-        if let text = await ReflectionEngine.shared.generate(modelID: model.reflectionModelID, prompt: prompt) {
-            riff = text
-        }
     }
 
     private var formattedValue: String {

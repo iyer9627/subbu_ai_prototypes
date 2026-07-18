@@ -46,8 +46,6 @@ struct MilestoneRowView: View {
     @State private var isFlipped = false
     @State private var quoteOrder: [BookQuote] = []
     @State private var quoteIndex = 0
-    @State private var riff: String?
-    @State private var isRiffing = false
 
     private var currentQuote: BookQuote? {
         quoteOrder.isEmpty ? nil : quoteOrder[quoteIndex % quoteOrder.count]
@@ -77,7 +75,6 @@ struct MilestoneRowView: View {
             } else {
                 // A fresh quote on every flip, cycling without repeats.
                 quoteIndex = (quoteIndex + 1) % max(quoteOrder.count, 1)
-                riff = nil
                 isFlipped = true
             }
         }
@@ -132,49 +129,11 @@ struct MilestoneRowView: View {
                 Text("\(quote.author.components(separatedBy: " ").last ?? quote.author) was \(quote.authorAgeAtPublication) when this was published — you'll be \(ageAtMilestone) at this milestone.")
                     .font(AppFont.serif(.caption))
                     .foregroundStyle(pigment)
-
-                if ReflectionEngine.isSupported {
-                    HStack {
-                        Button {
-                            Task { await generateRiff(quote: quote) }
-                        } label: {
-                            if isRiffing {
-                                ProgressView().controlSize(.small)
-                            } else {
-                                Label("A thought", systemImage: "sparkles")
-                                    .font(AppFont.serif(.caption))
-                            }
-                        }
-                        .buttonStyle(.bordered)
-                        .tint(pigment)
-                        .disabled(isRiffing)
-                        Spacer()
-                    }
-                    if let riff {
-                        Text(riff)
-                            .font(AppFont.serif(.caption))
-                            .foregroundStyle(Theme.inkSecondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
             }
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
         .paperCard()
-    }
-
-    private func generateRiff(quote: BookQuote) async {
-        isRiffing = true
-        defer { isRiffing = false }
-        let prompt = ReflectionPrompt.factRiff(
-            metricTitle: milestone.title,
-            metricValue: "arriving \(milestone.date.formatted(date: .long, time: .omitted)), when they will be \(ageAtMilestone)",
-            comparison: "the age (\(quote.authorAgeAtPublication)) at which \(quote.author) published \(quote.book), which says: “\(quote.text)”"
-        )
-        if let text = await ReflectionEngine.shared.generate(modelID: model.reflectionModelID, prompt: prompt) {
-            riff = text
-        }
     }
 }
 

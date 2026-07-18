@@ -53,4 +53,12 @@ enum ModelCatalog {
     static var available: [ModelOption] {
         all.filter(\.fits)
     }
+
+    /// Default for new installs: the best-writing model the device can run,
+    /// stopping short of the heavyweight Studio tier. The 0.5B floor model
+    /// writes noticeably worse, so it's only the default when nothing bigger
+    /// fits.
+    static var recommended: ModelOption {
+        available.last { $0.minMemoryGB < 10 } ?? all[0]
+    }
 }

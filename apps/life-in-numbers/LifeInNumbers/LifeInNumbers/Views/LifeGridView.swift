@@ -12,25 +12,52 @@ struct LifeGridView: View {
 
     var body: some View {
         let grid = MonthsGrid(profile: model.profile, asOf: .now, calculator: model.calculator)
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                ArtHeader(imageName: "GridArt",
-                          label: "A watercolor dog lying on a grid of colored squares")
-                summary(for: grid)
-                gridCanvas(for: grid)
-                    .padding(12)
-                    .paperCard()
-                legend
-                diaryList
+        ScrollViewReader { scroller in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    ArtHeader(imageName: "GridArt",
+                              label: "A watercolor dog lying on a grid of colored squares")
+                    summary(for: grid)
+                    gridCanvas(for: grid)
+                        .padding(12)
+                        .paperCard()
+                        .overlay(currentMonthAnchor(for: grid))
+                    legend
+                    diaryList
+                }
+                .padding()
             }
-            .padding()
+            .onAppear {
+                model.seedDiaryIfNeeded()
+                // This is a journal: open it to today's page. Give layout one
+                // beat to settle, then center the pulsing current month.
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(80))
+                    withAnimation(.easeInOut(duration: 0.6)) {
+                        scroller.scrollTo("currentMonth", anchor: .center)
+                    }
+                }
+            }
         }
         .background(Theme.paper)
         .navigationTitle("Life in Months")
-        .onAppear { model.seedDiaryIfNeeded() }
         .sheet(item: $editing) { selection in
             MemoryEditorView(selection: selection, monthsLived: grid.monthsLived)
         }
+    }
+
+    /// An invisible marker sitting over the current month's row of the
+    /// canvas, giving the scroll view something to scroll to.
+    private func currentMonthAnchor(for grid: MonthsGrid) -> some View {
+        GeometryReader { geo in
+            let row = grid.monthsLived / MonthsGrid.columnsPerRow
+            let fraction = (CGFloat(row) + 0.5) / CGFloat(max(grid.rows, 1))
+            Color.clear
+                .frame(width: 1, height: 1)
+                .position(x: geo.size.width / 2, y: geo.size.height * fraction)
+                .id("currentMonth")
+        }
+        .allowsHitTesting(false)
     }
 
     private func summary(for grid: MonthsGrid) -> some View {
@@ -79,17 +106,36 @@ struct LifeGridView: View {
                     context.fill(path, with: .color(Theme.faded))
                 }
                 if let event = eventMonths[month], let symbol = context.resolveSymbol(id: event.id) {
-                    let inset = cell * 0.18
-                    context.draw(symbol, in: rect.insetBy(dx: inset, dy: inset))
+                    if MemoryIconArt.assets[event.symbolName] != nil {
+                        // The watercolor painting fills the whole cell,
+                        // clipped to the same rounded shape.
+                        var art = context
+                        art.clip(to: path)
+                        art.draw(symbol, in: rect)
+                    } else {
+                        let inset = cell * 0.18
+                        context.draw(symbol, in: rect.insetBy(dx: inset, dy: inset))
+                    }
                 }
             }
         } symbols: {
             ForEach(model.events) { event in
-                Image(systemName: event.symbolName)
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundStyle(.white)
-                    .tag(event.id)
+                Group {
+                    if let asset = MemoryIconArt.assets[event.symbolName] {
+                        // Resolve small: the canvas redraws every pulse tick,
+                        // so don't rasterize the full-size painting each time.
+                        Image(asset)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 64, height: 64)
+                    } else {
+                        Image(systemName: event.symbolName)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundStyle(.white)
+                    }
+                }
+                .tag(event.id)
             }
         }
         .aspectRatio(aspectRatio(columns: columns, rows: rows, spacing: spacing), contentMode: .fit)
@@ -196,8 +242,25 @@ struct MemoryRowView: View {
                         .foregroundStyle(Theme.inkSecondary)
                         .italic()
                 }
+                if event.audioFilename != nil {
+                    Label("Voice note", systemImage: "waveform")
+                        .font(AppFont.serif(.caption2))
+                        .foregroundStyle(Theme.dustyBlue)
+                }
             }
             Spacer()
+            if let photo = MemoryMediaStore.photoImage(event.photoFilename) {
+                photo
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 52, height: 52)
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .strokeBorder(Theme.faded, lineWidth: 1)
+                    )
+                    .accessibilityLabel("Photo attached to \(event.title)")
+            }
             Image(systemName: "chevron.right")
                 .font(AppFont.serif(.caption))
                 .foregroundStyle(Theme.faded)

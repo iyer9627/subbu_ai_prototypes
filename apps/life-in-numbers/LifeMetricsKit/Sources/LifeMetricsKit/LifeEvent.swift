@@ -2,7 +2,8 @@ import Foundation
 
 /// A personal memory pinned to one month of a life — the unit of the
 /// life-in-months diary. Kept deliberately simple: an icon, a short title,
-/// and an optional note, all editable to the month.
+/// an optional note, and optionally a photo and a short voice note. Media
+/// is stored as files on device; events carry only the filenames.
 public struct LifeEvent: Codable, Identifiable, Equatable, Sendable {
     public var id: UUID
     /// Months since the birth month (0 = the month of birth).
@@ -11,13 +12,27 @@ public struct LifeEvent: Codable, Identifiable, Equatable, Sendable {
     /// SF Symbol shown in the grid cell and diary list.
     public var symbolName: String
     public var note: String?
+    /// Filename of an attached photo in the app's media store.
+    public var photoFilename: String?
+    /// Filename of an attached voice note (30 seconds max) in the media store.
+    public var audioFilename: String?
 
-    public init(id: UUID = UUID(), monthIndex: Int, title: String, symbolName: String, note: String? = nil) {
+    public init(
+        id: UUID = UUID(),
+        monthIndex: Int,
+        title: String,
+        symbolName: String,
+        note: String? = nil,
+        photoFilename: String? = nil,
+        audioFilename: String? = nil
+    ) {
         self.id = id
         self.monthIndex = monthIndex
         self.title = title
         self.symbolName = symbolName
         self.note = note
+        self.photoFilename = photoFilename
+        self.audioFilename = audioFilename
     }
 }
 

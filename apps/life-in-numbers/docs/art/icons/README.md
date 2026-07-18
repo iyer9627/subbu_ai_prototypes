@@ -1,7 +1,9 @@
-# In-app icon drop folder
+# Memory icons
 
-Drop the Midjourney watercolor icon squares here (1:1, single subject on
-cream paper), named after what they replace:
+Midjourney watercolor icon squares (1:1, single subject on cream paper), the
+source art for the memory icons. Each is cropped/resized into the asset
+catalog as `MemoryIcon-<name>` and drawn in the memory editor, the diary
+list, and the life grid itself.
 
 | File            | Subject            | Used for            |
 |-----------------|--------------------|---------------------|
@@ -16,7 +18,9 @@ cream paper), named after what they replace:
 | `music.png`     | a music note       | Music memories      |
 | `paw.png`       | a dog paw print    | New pet             |
 | `trophy.png`    | a small trophy     | Proud moment        |
-| `gift.png`      | a wrapped gift     | Celebrations        |
+| `gift.png`      | a wrapped gift     | Celebrations (source art still wanted here) |
 
-Then commit and push; they get cropped, resized, and wired into the
-memory editor and the life grid from here.
+To add or replace one: drop the square PNG here under the name above, then
+update the matching `MemoryIcon-*.imageset` in
+`LifeInNumbers/LifeInNumbers/Assets.xcassets` and the map in
+`Views/MemoryIconView.swift` if it's a brand-new icon.

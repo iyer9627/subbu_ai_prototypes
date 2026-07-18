@@ -11,7 +11,7 @@ struct ReflectionView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("A word from the machine")
+                    Text("A word for you")
                         .font(AppFont.serif(.title2, .semibold))
                         .foregroundStyle(Theme.ink)
                     Text("Written on this device by \(model.reflectionModelID), an open-source model. Nothing leaves your \(deviceNoun).")
@@ -25,6 +25,9 @@ struct ReflectionView: View {
                     reflectionCard
                     generateButton
                 }
+
+                ReminisceSection()
+                    .padding(.top, 12)
             }
             .padding()
         }
@@ -92,7 +95,9 @@ struct ReflectionView: View {
                         .lineSpacing(4)
                         .textSelection(.enabled)
                     if let date = model.lastReflectionDate {
-                        Text(date.formatted(date: .abbreviated, time: .shortened))
+                        Text(model.lastReflectionIsFallback
+                             ? "\(date.formatted(date: .abbreviated, time: .shortened)) — from the app's own pen; the model's draft wasn't worthy of you."
+                             : date.formatted(date: .abbreviated, time: .shortened))
                             .font(AppFont.serif(.caption))
                             .foregroundStyle(Theme.inkSecondary)
                     }
@@ -142,10 +147,23 @@ struct ReflectionView: View {
             milestones: milestones,
             asOf: now
         )
-        if let text = await engine.generate(modelID: model.reflectionModelID, prompt: prompt) {
-            model.lastReflection = text
-            model.lastReflectionDate = now
+        // The model gets one shot; if its polished draft still isn't worth
+        // the reader's time, the hand-written fallback is — always.
+        var text: String?
+        var isFallback = false
+        if let raw = await engine.generate(modelID: model.reflectionModelID, prompt: prompt) {
+            let polished = ReflectionPrompt.polish(raw)
+            if ReflectionPrompt.isWorthShowing(polished) {
+                text = polished
+            }
         }
+        if text == nil {
+            text = ReflectionPrompt.fallback(metrics: metrics, milestones: milestones, asOf: now)
+            isFallback = true
+        }
+        model.lastReflection = text
+        model.lastReflectionDate = now
+        model.lastReflectionIsFallback = isFallback
     }
 }
 
